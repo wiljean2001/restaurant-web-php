@@ -6,9 +6,10 @@
 <div class="d-flex flex-row w-100 flex-wrap">
     <div class="w-50">
         <h1 class="my-lg-2 mt-3 mt-lg-3">ACTUALIZAR PLATO</h1>
-        <form action=" {{ route('dish.store') }}" method="POST" class="d-flex flex-column"
+        <form action=" {{ route('dish.update') }}" method="POST" class="d-flex flex-column"
             enctype="multipart/form-data">
             @csrf
+            <input type="text" name="id" id="id" hidden>
             <div class="col-md-auto">
                 <label for="name">Ingresar plato</label>
                 <div class="form-group">
@@ -26,7 +27,8 @@
             <div class="col-md-auto">
                 <label for="price">Ingresar precio</label>
                 <div class="form-group">
-                    <input type="number" class="form-control" placeholder="18.50" name="price" required id="price">
+                    <input type="number" class="form-control" placeholder="18.50" name="price" required id="price"
+                        step="0.01">
                 </div>
             </div>
             <div class="col-md-auto col-lg-auto">
@@ -96,12 +98,13 @@
         e.preventDefault();
         var row = $(this).parent().parent().parent()[0];
         var data = table.row(row).data();
+        var price = parseFloat(data[2], 10);
         $('#id').val(data[0]);
         $('#name').val(data[1]);
-        $('#price').val(parseFloat(data[2], 10));
+        $('#price').val(price).text().replace(',', '.');
         $('#descript').val(data[3]);
-        $('#stock').val(parseFloat(data[5], 10));
-        console.log(data);
+        $('#stock').val(parseInt(data[5]));
+        // console.log(data);
 });
 </script>
 @endpush

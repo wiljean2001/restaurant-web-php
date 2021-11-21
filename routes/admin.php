@@ -20,6 +20,7 @@ Route::post('platos', [DishController::class, 'store'])->name('dish.store');
 Route::get('platos/eliminar', [DishController::class, 'delete'])->name('dish.delete');
 Route::post('platos/eliminar', [DishController::class, 'destroy'])->name('dish.distroy');
 Route::get('platos/editar', [DishController::class, 'edit'])->name('dish.edit');
+Route::post('platos/editar', [DishController::class, 'update'])->name('dish.update');
 
 
 // plato/registrar

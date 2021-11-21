@@ -64,9 +64,39 @@ class DishController extends Controller
         return view('dishes.update', compact('heads', 'dishes', 'config'));
     }
 
-    public function update(Request $request, Dish $dish)
+    public function update(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'stock' => 'required'
+        ]);
+
+        if ($request->image) {
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '-' . $file->getClientOriginalName();
+                $file->move(public_path() . '/files/dishes/', $filename);
+            }
+            Dish::where('id', $request->id)
+                ->update([
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'stock' => $request->stock,
+                    'image' => $filename,
+                    'price' => $request->price
+                ]);
+        } else {
+            Dish::where('id', $request->id)
+                ->update([
+                    'name' => $request->name,
+                    'description' => $request->description,
+                    'stock' => $request->stock,
+                    'price' => $request->price
+                ]);
+        }
+        return $this->edit();
     }
 
     public function destroy(Request $request)

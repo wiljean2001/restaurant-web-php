@@ -30,7 +30,7 @@
                 <div class="col-md-8">
                     <label for="price">Ingresar precio</label>
                     <div class="form-group">
-                        <input type="number" class="form-control" placeholder="18.50" name="price" required>
+                        <input type="number" class="form-control" placeholder="18.50" name="price" required step="0.01">
                     </div>
                 </div>
             </div>

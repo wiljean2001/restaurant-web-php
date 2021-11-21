@@ -344,7 +344,8 @@ return [
         ['header' => 'Perfil'],
         [
             'text' => 'Perfil',
-            'url'  => 'admin/settings',
+            // 'url'  => 'admin/settings',
+            'url'  => '/user/profile',
             'icon_color' => 'cyan',
             // 'icon' => 'fas fa-fw fa-user',
             'text_color' => 'success',
@@ -535,7 +536,16 @@ return [
                 ],
             ],
         ],
-
+        'ICheckBootstrap' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/icheck-bootstrap/icheck-bootstrap.min.js',
+                ],
+            ],
+        ],
     ],
 
     /*

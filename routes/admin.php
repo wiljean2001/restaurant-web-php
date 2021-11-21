@@ -9,6 +9,7 @@ Route::get('', function () {
     // return view('admin');
     return view('admin');
 });
+
 // Route::get('pestañas', function () {
 //     return view('adminIFrame');
 // });

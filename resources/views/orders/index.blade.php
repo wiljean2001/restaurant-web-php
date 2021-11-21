@@ -54,7 +54,7 @@
       </ul>
       <div class="card-body">
         <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
-          data-target="#modalCustom" class="btn btn-primary mymodal"/>
+          class="btn btn-primary modalDish" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -68,49 +68,8 @@
   </div>
 </div>
 
-
-<!-- Modal ADMINLTE-->
-<x-adminlte-modal id="exampleModal" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
-  static-backdrop scrollable>
-  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
-    <div>
-      @csrf
-      <input type="text" name="id" id="id" hidden>
-      <div class="form-floating mb-3 mx-3 mx-lg-3">
-        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
-        <label for="floatingInput">Cantidad</label>
-      </div>
-    </div>
-    <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
-  </form>
-  <x-slot name="footerSlot">
-    <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
-  </x-slot>
-</x-adminlte-modal>
-
-<!-- Modal Boostrap-->
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{ route('order.dish.store') }}" method="POST">
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Solicitar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div> --}}
-
-
 {{-- Listar Sugerencias --}}
+{{-- --}}
 
 {{-- Listar Bebidas --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
@@ -189,14 +148,113 @@
     {{ $spirits->links() }}
   </div>
 </div>
+
+
+<!-- Modal ADMINLTE ----------  Para platos -->
+<x-adminlte-modal id="ModalDishes" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+  static-backdrop scrollable>
+  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+    <div>
+      @csrf
+      <input type="text" name="id" id="id" hidden>
+      <div class="form-floating mb-3 mx-3 mx-lg-3">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <label for="floatingInput">Cantidad</label>
+      </div>
+    </div>
+    <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+  </form>
+  <x-slot name="footerSlot">
+    <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
+  </x-slot>
+</x-adminlte-modal>
+
+<!-- Modal ADMINLTE ----------  Para bebidas -->
+<x-adminlte-modal id="ModalDrinks" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+  static-backdrop scrollable>
+  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+    <div>
+      @csrf
+      <input type="text" name="id" id="id" hidden>
+      <div class="form-floating mb-3 mx-3 mx-lg-3">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <label for="floatingInput">Cantidad</label>
+      </div>
+    </div>
+    <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+  </form>
+  <x-slot name="footerSlot">
+    <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
+  </x-slot>
+</x-adminlte-modal>
+
+<!-- Modal ADMINLTE ----------  Para licores -->
+<x-adminlte-modal id="ModalSpirits" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+  static-backdrop scrollable>
+  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+    <div>
+      @csrf
+      <input type="text" name="id" id="id" hidden>
+      <div class="form-floating mb-3 mx-3 mx-lg-3">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <label for="floatingInput">Cantidad</label>
+      </div>
+    </div>
+    <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+  </form>
+  <x-slot name="footerSlot">
+    <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
+  </x-slot>
+</x-adminlte-modal>
+
+<!-- Modal Boostrap-->
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ route('order.dish.store') }}" method="POST">
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Solicitar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> --}}
+
+
 @endsection
+
+
 @section('js')
 <script>
   $(document).ready(function() {
-            $('.mymodal').click(function() {
+            $('.modalDish').click(function() {
                 var id = this.id;
                 $('#id').val(id);
-                $('#exampleModal').modal({
+                $('#ModalDishes').modal({
+                    show: true
+                });
+
+            });
+            $('.modalDrink').click(function() {
+                var id = this.id;
+                $('#id').val(id);
+                $('#ModalDrinks').modal({
+                    show: true
+                });
+
+            });
+            $('.modalSpirit').click(function() {
+                var id = this.id;
+                $('#id').val(id);
+                $('#ModalSpirits').modal({
                     show: true
                 });
 

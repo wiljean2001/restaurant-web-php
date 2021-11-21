@@ -53,10 +53,8 @@
         <li class="list-group-item">A third item</li> --}}
       </ul>
       <div class="card-body">
-        <button id="{{ $dish->id }}" type="button" class="btn btn-primary mymodal" data-toggle="modal">
-          <i class="fas fa-plus text-red"></i>
-          <label for="Solicitar">Agregar</label>
-        </button>
+        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
+          data-target="#modalCustom" class="btn btn-primary mymodal"/>
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -71,8 +69,27 @@
 </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal ADMINLTE-->
+<x-adminlte-modal id="exampleModal" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+  static-backdrop scrollable>
+  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+    <div>
+      @csrf
+      <input type="text" name="id" id="id" hidden>
+      <div class="form-floating mb-3 mx-3 mx-lg-3">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <label for="floatingInput">Cantidad</label>
+      </div>
+    </div>
+    <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+  </form>
+  <x-slot name="footerSlot">
+    <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
+  </x-slot>
+</x-adminlte-modal>
+
+<!-- Modal Boostrap-->
+{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -81,8 +98,7 @@
       </div>
       <form action="{{ route('order.dish.store') }}" method="POST">
         <div class="modal-body">
-          @csrf
-          <input type="text" name="id" id="id" hidden>
+          ...
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -91,7 +107,7 @@
       </form>
     </div>
   </div>
-</div>
+</div> --}}
 
 
 {{-- Listar Sugerencias --}}
@@ -177,26 +193,26 @@
 @section('js')
 <script>
   $(document).ready(function() {
-    $('.mymodal').click(function() {
-        var id = this.id;
-        $('#id').val(id);
-        $('#exampleModal').modal({ 
-            show: true 
-        });
+            $('.mymodal').click(function() {
+                var id = this.id;
+                $('#id').val(id);
+                $('#exampleModal').modal({
+                    show: true
+                });
 
-    });
-  });
+            });
+        });
 </script>
 <script>
-  $('#to-button').on("click", function () {
-    // presentar la cuenta de clicks realizados sobre el elemento con id "prueba"
-    setTimeout(() => {
-        window.scrollTo({
-            left: 0,
-            top: (window.screen.height/1.1),
-            behavior: "smooth"
+  $('#to-button').on("click", function() {
+            // presentar la cuenta de clicks realizados sobre el elemento con id "prueba"
+            setTimeout(() => {
+                window.scrollTo({
+                    left: 0,
+                    top: (window.screen.height / 1.1),
+                    behavior: "smooth"
+                });
+            });
         });
-    });
-  });
 </script>
 @endsection

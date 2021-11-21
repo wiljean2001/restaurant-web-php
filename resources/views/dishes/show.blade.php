@@ -8,8 +8,8 @@
     <div class="row">
         <h1 class="my-lg-2 my-2">MOSTRAR PLATOS</h1>
         {{-- <table class="table table-flush" id="datatable-buttons"> --}}
-            <x-adminlte-datatable id="table1" :heads="$heads" head-theme="dark" :config='$config' with-buttons
-                with-footer>
+            <x-adminlte-datatable id="table1" :heads="$heads" theme="light" head-theme="dark" :config='$config'
+                with-buttons with-footer hoverable>
                 @foreach($dishes as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>
@@ -20,7 +20,14 @@
                         <img src="{!! asset('files/dishes/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
                     </td>
                     <td>{!! $row->stock !!} uds.</td>
-                    <td><a href="">h</a></td>
+                    <td>
+                        <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
+                            <i class="fa fa-lg fa-fw fa-pen"></i>
+                        </button>
+                        <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
+                            <i class="fa fa-lg fa-fw fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
                 @endforeach
             </x-adminlte-datatable>

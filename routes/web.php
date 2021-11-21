@@ -7,5 +7,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
+// Order routes
 Route::get('/', [OrderController::class, 'index'])->name('menu-restaurant');
 Route::post('pedido/registrar', [OrderController::class, 'store'])->name('order.dish.store');

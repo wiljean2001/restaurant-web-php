@@ -13,7 +13,7 @@
         <div class="row  pb-4 mb-pg-4">
             <h1 class="my-lg-2">ELIMINAR PLATOS</h1>
             <x-adminlte-datatable id="table1" :heads="$heads" head-theme="dark" :config='$config' with-buttons
-                with-footer>
+                with-footer hoverable>
                 @foreach($dishes as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>

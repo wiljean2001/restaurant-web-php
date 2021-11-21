@@ -2,63 +2,53 @@
 @section('title', 'bebida')
 
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <h1 class="my-lg-2 mt-3 mt-lg-3">AGREGAR BEBIDA/h1>
-        <form action=" {{ route('dish.store') }}" method="POST" class="mx-lg-9 col-md-10 ml-4 ml-lx-4"
+<div class="d-flex flex-row w-100">
+    <div class="w-100">
+        <h1 class="my-lg-2 mt-3 mt-lg-3">AGREGAR BEBIDA</h1>
+        <form action=" {{ route('drink.store') }}" method="POST" class="d-flex flex-column"
             enctype="multipart/form-data">
             @csrf
-            <div class="row">
-                <div class="col-md-8">
-                    <label for="name">Ingresar bebida</label>
-                    <div class="form-group">
-                        <input type="text" class="form-control focused w-100" placeholder=" Refresco de maracuya" name="name"
-                            required>
-                    </div>
+            <div class="col-md-8">
+                <label for="name">Ingresar bebida</label>
+                <div class="form-group">
+                    <input type="text" class="form-control focused w-100" placeholder="Refresco de maracuya" name="name"
+                        required>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <label for="description">Ingresar descripción</label>
-                    <div class="form-group">
-                        <textarea class="form-control" placeholder="Jarra de 1lt de maracuya" name="description"
-                            required></textarea>
-                    </div>
+            <div class="col-md-8">
+                <label for="description">Ingresar descripción</label>
+                <div class="form-group">
+                    <textarea class="form-control" placeholder="Jarra de 1lt de maracuya" name="description"
+                        required></textarea>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <label for="price">Ingresar precio</label>
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="18.50" name="price" required step="0.01">
-                    </div>
+            <div class="col-md-8">
+                <label for="price">Ingresar precio</label>
+                <div class="form-group">
+                    <input type="number" class="form-control" placeholder="18.50" name="price" required step="0.01">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <label for="price">Ingresar stock ud.</label>
-                    <div class="form-group">
-                        <input type="number" class="form-control" placeholder="100" name="stock" required>
-                    </div>
+            <div class="col-md-8">
+                <label for="price">Ingresar stock ud.</label>
+                <div class="form-group">
+                    <input type="number" class="form-control" plac  eholder="100" name="stock" required>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-8">
-                    <label for="image">Ingresar imagen</label>
-                    <div class="form-group">
+            <div class="col-md-8">
+                <label for="image">Ingresar imagen</label>
+                <div class="form-group">
+                    <div class="custom-file">
                         <div class="custom-file">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="customFileLang" lang="es" name="image"
-                                    required accept="image/*">
-                                <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
-                            </div>
+                            <input type="file" class="custom-file-input" id="customFileLang" lang="es" name="image"
+                                required accept="image/*">
+                            <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row mb-4 mb-lg-4">
+            <div class="mb-4 mb-lg-4 text-center">
                 <div class="col-md-8 mt-4 mt-lg-4 px-5 px-lg-5">
-                    <input type="submit" class="btn btn-primary w-100 py-2 py-lg-2" name="register"
+                    <input type="submit" class="btn bg-gradient-purple w-75 py-2 py-lg-2" name="register"
                         value="REGISTRAR BEBIDA">
                 </div>
             </div>

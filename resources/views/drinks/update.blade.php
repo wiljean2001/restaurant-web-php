@@ -6,7 +6,7 @@
 <div class="d-flex flex-row w-100 flex-wrap">
     <div class="w-50">
         <h1 class="my-lg-2 mt-3 mt-lg-3">ACTUALIZAR BEBIDA</h1>
-        <form action=" {{ route('dish.update') }}" method="POST" class="d-flex flex-column"
+        <form action=" {{ route('drink.update') }}" method="POST" class="d-flex flex-column"
             enctype="multipart/form-data">
             @csrf
             <input type="text" name="id" id="id" hidden>
@@ -49,9 +49,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-4 mb-lg-4">
-                <div class="col-md-8 mt-4 mt-lg-4 px-5 px-lg-5">
-                    <input type="submit" class="btn btn-primary w-100 py-2 py-lg-2" name="register"
+            <div class="mb-4 mb-lg-4 text-center">
+                <div class="col-md-auto mt-4 mt-lg-4 px-5 px-lg-5">
+                    <input type="submit" class="btn bg-gradient-purple w-75 py-2 py-lg-2" name="register"
                         value="ACTUALIZAR PLATO">
                 </div>
             </div>
@@ -60,7 +60,7 @@
     <div class="p-2 p-lg-2 table-responsive w-50">
         <x-adminlte-datatable id="table2" :heads="$heads" head-theme="dark" :config='$config' with-buttons with-footer
             hoverable>
-            @foreach($dishes as $row)
+            @foreach($drinks as $row)
             <tr>
                 <td>{!! $row->id !!}</td>
                 <td>{!! $row->name !!}</td>
@@ -70,7 +70,7 @@
                 </td>
                 <td>{!! $row->description !!}</td>
                 <td>
-                    <img src="{!! asset('files/dishes/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
+                    <img src="{!! asset('files/drinks/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
                 </td>
                 <td>
                     {!! $row->stock !!}

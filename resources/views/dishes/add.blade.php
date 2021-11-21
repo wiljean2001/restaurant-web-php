@@ -8,33 +8,33 @@
         <form action=" {{ route('dish.store') }}" method="POST" class="d-flex flex-column"
             enctype="multipart/form-data">
             @csrf
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <label for="name">Ingresar plato</label>
                 <div class="form-group">
                     <input type="text" class="form-control focused w-100" placeholder="Arroz con pollo" name="name"
                         required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <label for="description">Ingresar descripción</label>
                 <div class="form-group">
                     <textarea class="form-control" placeholder="Plato de arroz con pollo" name="description"
                         required></textarea>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <label for="price">Ingresar precio</label>
                 <div class="form-group">
                     <input type="number" class="form-control" placeholder="18.50" name="price" required step="0.01">
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <label for="price">Ingresar stock ud.</label>
                 <div class="form-group">
                     <input type="number" class="form-control" placeholder="100" name="stock" required>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <label for="image">Ingresar imagen</label>
                 <div class="form-group">
                     <div class="custom-file">
@@ -46,7 +46,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-4 mb-lg-4 ">
+            <div class="mb-4 mb-lg-4 text-center">
                 <div class="col-md-8 mt-4 mt-lg-4 px-5 px-lg-5">
                     <input type="submit" class="btn bg-gradient-purple w-75 py-2 py-lg-2" name="register"
                         value="REGISTRAR PLATO">

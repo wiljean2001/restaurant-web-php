@@ -7,21 +7,21 @@
 @section('content')
 
 <div class="container-fluid w-auto">
-    <form action="{{ route('dish.distroy') }}" method="POST" id="form-delete">
+    <form action="{{ route('drink.distroy') }}" method="POST" id="form-delete">
         @csrf
         @method('POST')
         <div class="row  pb-4 mb-pg-4">
             <h1 class="my-lg-2">ELIMINAR BEBIDA</h1>
             <x-adminlte-datatable id="table1" :heads="$heads" head-theme="dark" :config='$config' with-buttons
                 with-footer>
-                @foreach($dishes as $row)
+                @foreach($drinks as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>
                     <td>{!! $row->name !!}</td>
                     <td>S/ {!! $row->price !!}</td>
                     <td>{!! $row->description !!}</td>
                     <td>
-                        <img src="{!! asset('files/dishes/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
+                        <img src="{!! asset('files/drinks/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
                     </td>
                     <td>{!! $row->stock !!} uds.</td>
                     <td>
@@ -44,7 +44,6 @@
 {{--
 @section('js')
 <script>
-    $("#form-delete").submit();
     $(document).ready(function() {
         $("#form-delete").submit(function( event ) {
             event.preventDefault();
@@ -59,7 +58,7 @@
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    event.currentTarget.submit();
+                    $(this).submit();
                 }
             });
         });

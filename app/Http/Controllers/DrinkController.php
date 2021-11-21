@@ -12,7 +12,7 @@ class DrinkController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $drinks = Drink::all();
-        return view('dishes.show', compact('heads', 'drinks', 'config'));
+        return view('drinks.show', compact('heads', 'drinks', 'config'));
     }
 
     public function create()

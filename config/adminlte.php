@@ -278,19 +278,19 @@ return [
             'submenu' => [
                 [
                     'text' => 'Registrar',
-                    'url'  => '#',
+                    'url'  => 'admin/bebida/registrar',
                 ],
                 [
                     'text' => 'Buscar',
-                    'url'  => '#',
+                    'url'  => 'admin/bebida/buscar',
                 ],
                 [
                     'text' => 'Actualizar',
-                    'url'  => '#',
+                    'url'  => 'admin/bebidas/editar',
                 ],
                 [
                     'text' => 'Eliminar',
-                    'url'  => '#',
+                    'url'  => 'admin/bebidas/eliminar',
                 ],
 
             ],
@@ -338,7 +338,7 @@ return [
         // [
         //     'text'    => 'Ver normal',
         //     'icon'    => 'fas fa-window-restore',
-        //     'target'  => '_parent',
+        //     'target'  => '_blank|_self|_parent|_top|framename',
         //     'url'     => 'admin',
         // ],
         ['header' => 'Perfil'],
@@ -514,12 +514,14 @@ return [
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/blue/pace-theme-center-radar.min.css',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/purple/pace-theme-loading-bar.min.css',
+                    // 'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/purple/pace-theme-corner-indicator.min.css',
+                    // 'location' => 'vendor/pace-progress/themes/blue/pace-theme-corner-indicator.min.css',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                    'asset' => true,
+                    'location' => 'vendor/pace-progress/pace.min.js',
                 ],
             ],
         ],
@@ -533,7 +535,7 @@ return [
                 ],
             ],
         ],
-        
+
     ],
 
     /*

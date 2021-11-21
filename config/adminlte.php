@@ -103,6 +103,7 @@ return [
     */
     // card-outline card-primary
     'classes_auth_card' => '',
+    // 'classes_auth_header' => 'bg-gradient-info',
     'classes_auth_header' => 'bg-gradient-info',
     'classes_auth_body' => '',
     'classes_auth_footer' => 'text-center',
@@ -120,16 +121,16 @@ return [
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Layout-and-Styling-Configuration
     |
     */
-
+    // navbar-white navbar-light
     'classes_body' => '',
     'classes_brand' => '',
     'classes_brand_text' => '',
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-purple elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'bg-gradient-purple navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -523,7 +524,7 @@ return [
             ],
         ],
         'BootstrapSwitch' => [
-            'active' => true,
+            'active' => false,
             'files' => [
                 [
                     'type' => 'js',
@@ -532,6 +533,7 @@ return [
                 ],
             ],
         ],
+        
     ],
 
     /*

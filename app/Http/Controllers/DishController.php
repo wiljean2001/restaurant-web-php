@@ -44,9 +44,14 @@ class DishController extends Controller
             $file->move(public_path() . '/files/dishes/', $filename);
             $dishObj->image = $filename;
         }
-        $dishObj->save();
 
-        return redirect()->route('dish.search', $dishObj);
+        if ($dishObj->save()) {
+            back()->with('message', 'true');
+        } else {
+            back()->with('error', 'true');
+        }
+
+        return redirect()->route('dish.create', $dishObj);
     }
 
     public function show(Dish $dishes)

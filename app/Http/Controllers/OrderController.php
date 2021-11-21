@@ -24,4 +24,8 @@ class OrderController extends Controller
 
         return view('orders.index', compact('dishes', 'drinks', 'spirits'));
     }
+    public function store(Request $request)
+    {
+        dd($request->id);
+    }
 }

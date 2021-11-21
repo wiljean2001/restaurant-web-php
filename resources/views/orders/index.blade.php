@@ -34,32 +34,28 @@
     </svg>
   </div>
 </div>
-
 {{-- Listar Platos --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
   <h1 class=" my-4">Menu de platos</h1>
-
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($dishes as $dish)
 
-    <div class="card" style="width: 22rem;">
+    <div class="card" style="width: 22rem; margin-bottom: 20px">
       <img class="card-img-top h-50" src="{{ asset('files/dishes/' . $dish->image) }}" alt="Plato a pedir">
       <div class="card-body">
-        <h5 class="card-title">{{ $dish->name }}</h5>
+        <h4 class="card-title">{{ $dish->name }}</h4>
         <p class="card-text">{{ $dish->description }}</p>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><small class="text-muted">{{ $dish->stock }} Uds.</small></li>
+        <li class="list-group-item"><small class="text-muted">$/ {{ $dish->price }} </small></li>
         {{-- <li class="list-group-item">A second item</li>
         <li class="list-group-item">A third item</li> --}}
       </ul>
       <div class="card-body">
-        <a href="">
+        <button id="{{ $dish->id }}" type="button" class="btn btn-primary mymodal" data-toggle="modal">
           <i class="fas fa-plus text-red"></i>
-        </a>
-        <button type="button" class="btn btn-default my-1" data-container="body" data-toggle="popover"
-          data-placement="left" data-content="{{ $dish->description }}">
-          <i class="fas fa-info"></i>
+          <label for="Solicitar">Agregar</label>
         </button>
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
@@ -73,6 +69,30 @@
     {{ $dishes->links() }}
   </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ route('order.dish.store') }}" method="POST">
+        <div class="modal-body">
+          @csrf
+          <input type="text" name="id" id="id" hidden>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary">Solicitar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 {{-- Listar Sugerencias --}}
 
@@ -153,4 +173,30 @@
     {{ $spirits->links() }}
   </div>
 </div>
+@endsection
+@section('js')
+<script>
+  $(document).ready(function() {
+    $('.mymodal').click(function() {
+        var id = this.id;
+        $('#id').val(id);
+        $('#exampleModal').modal({ 
+            show: true 
+        });
+
+    });
+  });
+</script>
+<script>
+  $('#to-button').on("click", function () {
+    // presentar la cuenta de clicks realizados sobre el elemento con id "prueba"
+    setTimeout(() => {
+        window.scrollTo({
+            left: 0,
+            top: (window.screen.height/1.1),
+            behavior: "smooth"
+        });
+    });
+  });
+</script>
 @endsection

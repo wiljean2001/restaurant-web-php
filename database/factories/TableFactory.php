@@ -29,7 +29,8 @@ class TableFactory extends Factory
             $this->f++;
         }
         return [
-            'num_table' => $this->num[$this->f] . $this->str[$this->i - 1]
+            'num_table' => $this->num[$this->f] . $this->str[$this->i - 1],
+            'state' => $this->faker->boolean(10),
         ];
     }
 }

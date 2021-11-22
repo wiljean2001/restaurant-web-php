@@ -16,6 +16,7 @@ class CreateTablesTable extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('num_table', 5)->nullable(false);
+            $table->boolean('state')->nullable(false);
             $table->timestamps();
         });
     }

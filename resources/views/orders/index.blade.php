@@ -34,7 +34,52 @@
     </svg>
   </div>
 </div>
-{{-- Listar Platos --}}
+
+{{-- menu order --}}
+<nav class="container navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item mr-3 mr-lg-3">
+          <x-adminlte-button icon="fas fa-stream" label="Ver platos" data-toggle="modal" class="btn btn-primary" />
+        </li>
+        <li class="nav-item mr-3 mr-lg-3">
+          <x-adminlte-button icon="fas fa-stream" label="Ver bebidas" data-toggle="modal" class="btn btn-primary" />
+        </li>
+        <li class="nav-item">
+          <x-adminlte-button icon="fas fa-stream" label="Ver licores" data-toggle="modal" class="btn btn-primary" />
+        </li>
+
+      </ul>
+      <div class="d-flex">
+        <form action="{{ route('order.create') }}" method="POST" class="d-flex flex-row">
+          @csrf
+          <select name="idTable" class="mr-3 mr-lg-3">
+            <option hidden selected>Mesas disponibles:</option>
+            @foreach ($tables as $table)
+            @if ($table->state == false)
+            <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
+            @endif
+            @endforeach
+          </select>
+          <div class="mr-3 mr-lg-3">
+            <x-adminlte-input name="idOrder" placeholder="" igroup-size="lg" disabled class="bg-white" id="idOrder">
+              <x-slot name="prependSlot">
+                <div class="input-group-text ">
+                  {{ __('Orden:') }}
+                </div>
+              </x-slot>
+            </x-adminlte-input>
+          </div>
+          <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
+            class="btn btn-primary mr-5 mr-lg-5" name="submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
+
+{{-- Listar Platos / cards de platos --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
   <h1 class=" my-4">Menu de platos</h1>
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
@@ -49,8 +94,6 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><small class="text-muted">{{ $dish->stock }} Uds.</small></li>
         <li class="list-group-item"><small class="text-muted">$/ {{ $dish->price }} </small></li>
-        {{-- <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li> --}}
       </ul>
       <div class="card-body">
         <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
@@ -71,14 +114,14 @@
 {{-- Listar Sugerencias --}}
 {{-- --}}
 
-{{-- Listar Bebidas --}}
+{{-- Listar Bebidas / cards de bebidas --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
   <h1 class=" my-4">Menu de bebidas</h1>
 
-  <div class="d-flex flex-wrap flex-row justify-content-lg-between mb-lg-3">
+  <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($drinks as $drink)
 
-    <div class="card" style="width: 22rem;">
+    <div class="card" style="width: 22rem; margin-bottom: 20px">
       <img class="card-img-top h-50" src="{{ asset('files/drinks/' . $drink->image) }}" alt="Plato a pedir">
       <div class="card-body">
         <h5 class="card-title">{{ $drink->name }}</h5>
@@ -86,17 +129,11 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><small class="text-muted">{{ $drink->stock }} Uds.</small></li>
-        {{-- <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li> --}}
+        <li class="list-group-item"><small class="text-muted">$/ {{ $drink->price }} </small></li>
       </ul>
       <div class="card-body">
-        <a href="">
-          <i class="fas fa-plus text-red"></i>
-        </a>
-        <button type="button" class="btn btn-default my-1" data-container="body" data-toggle="popover"
-          data-placement="left" data-content="{{ $drink->description }}">
-          <i class="fas fa-info"></i>
-        </button>
+        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
+          class="btn btn-primary modalDrink" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -110,14 +147,14 @@
   </div>
 </div>
 
-{{-- Listar Licores --}}
+{{-- Listar Licores / cards de licores --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
   <h1 class=" my-4">Menu de licores</h1>
 
-  <div class="d-flex flex-wrap flex-row justify-content-lg-between mb-lg-3">
+  <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($spirits as $spirit)
 
-    <div class="card" style="width: 22rem;">
+    <div class="card" style="width: 22rem; margin-bottom: 20px">
       <img class="card-img-top h-50" src="{{ asset('files/spirits/' . $spirit->image) }}" alt="Plato a pedir">
       <div class="card-body">
         <h5 class="card-title">{{ $spirit->name }}</h5>
@@ -125,17 +162,11 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><small class="text-muted">{{ $spirit->stock }} Uds.</small></li>
-        {{-- <li class="list-group-item">A second item</li>
-        <li class="list-group-item">A third item</li> --}}
+        <li class="list-group-item"><small class="text-muted">$/ {{ $spirit->price }} </small></li>
       </ul>
       <div class="card-body">
-        <a href="">
-          <i class="fas fa-plus text-red"></i>
-        </a>
-        <button type="button" class="btn btn-default my-1" data-container="body" data-toggle="popover"
-          data-placement="left" data-content="{{ $spirit->description }}">
-          <i class="fas fa-info"></i>
-        </button>
+        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
+          class="btn btn-primary modalSpirit" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -149,16 +180,34 @@
   </div>
 </div>
 
+@if (Session::has('message'))
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    <div class="toast-header">
+      <i class="far fa-check-circle green"></i>
+      <strong class="mr-auto ml-1">Finalizado</strong>
+      <small>{{ date('m-d-Y h:i:s a'); }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      {{ Session::get('message') }}
+    </div>
+  </div>
+</div>
 
+@endif
 <!-- Modal ADMINLTE ----------  Para platos -->
-<x-adminlte-modal id="ModalDishes" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+<x-adminlte-modal id="ModalDishes" title="Agregar plato al pedido" size="lg" theme="teal" icon="fas fa-bell" v-centered
   static-backdrop scrollable>
-  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+  <form action="{{ route('dish.orders.store') }}" method="POST" class="text-center">
     <div>
       @csrf
-      <input type="text" name="id" id="id" hidden>
+      <input type="text" name="id" id="idDi" hidden>
+      <input type="text" name="idOrder" id="idDiOrder" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
-        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar; Ejem.: 4"
+          required name="quantify">
         <label for="floatingInput">Cantidad</label>
       </div>
     </div>
@@ -170,12 +219,13 @@
 </x-adminlte-modal>
 
 <!-- Modal ADMINLTE ----------  Para bebidas -->
-<x-adminlte-modal id="ModalDrinks" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+<x-adminlte-modal id="ModalDrinks" title="Agregar bebida al pedido" size="lg" theme="teal" icon="fas fa-bell" v-centered
   static-backdrop scrollable>
-  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+  <form action="{{ route('drink.orders.store') }}" method="POST" class="text-center">
     <div>
       @csrf
-      <input type="text" name="id" id="id" hidden>
+      <input type="text" name="id" id="idDr" hidden>
+      <input type="text" name="idOrder" id="idDrOrder" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
         <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
         <label for="floatingInput">Cantidad</label>
@@ -189,12 +239,13 @@
 </x-adminlte-modal>
 
 <!-- Modal ADMINLTE ----------  Para licores -->
-<x-adminlte-modal id="ModalSpirits" title="Account Policy" size="lg" theme="teal" icon="fas fa-bell" v-centered
+<x-adminlte-modal id="ModalSpirits" title="Agregar licor al pedido" size="lg" theme="teal" icon="fas fa-bell" v-centered
   static-backdrop scrollable>
-  <form action="{{ route('order.dish.store') }}" method="POST" class="text-center">
+  <form action="{{ route('spirit.orders.store') }}" method="POST" class="text-center">
     <div>
       @csrf
-      <input type="text" name="id" id="id" hidden>
+      <input type="text" name="id" id="idSpOrder" hidden>
+      <input type="text" name="idOrder" id="idSp" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
         <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
         <label for="floatingInput">Cantidad</label>
@@ -236,28 +287,29 @@
 <script>
   $(document).ready(function() {
             $('.modalDish').click(function() {
-                var id = this.id;
-                $('#id').val(id);
-                $('#ModalDishes').modal({
-                    show: true
-                });
-
+              var id = this.id;
+              $('#idDi').val(id);
+              $('#idDiOrder').val({{ Session::get('orderId') }});
+              $('#ModalDishes').modal({
+               show: true
+              });
             });
             $('.modalDrink').click(function() {
-                var id = this.id;
-                $('#id').val(id);
-                $('#ModalDrinks').modal({
-                    show: true
-                });
+              var id = this.id;
+              $('#idDr').val(id);
+              $('#idDrOrder').val({{ Session::get('orderId') }});
+              $('#ModalDrinks').modal({
+                  show: true
+              });
 
             });
             $('.modalSpirit').click(function() {
-                var id = this.id;
-                $('#id').val(id);
-                $('#ModalSpirits').modal({
-                    show: true
-                });
-
+              var id = this.id;
+              $('#idSp').val(id);
+              $('#idSpOrder').val({{ Session::get('orderId') }});
+              $('#ModalSpirits').modal({
+                  show: true
+              });
             });
         });
 </script>
@@ -272,5 +324,12 @@
                 });
             });
         });
+</script>
+
+<script>
+  $(document).ready(function() {
+    var idOrder = {{ Session::get('orderId') }};
+      $("#idOrder").val(idOrder);
+  });
 </script>
 @endsection

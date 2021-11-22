@@ -16,13 +16,12 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->date('date')->nullable(false);
-            $table->time('hour')->nullable(false);
             $table->timestamps();
             $table->foreignId('tableID')
-                ->nullable(true)
+                ->nullable(false)
                 ->constrained('tables');
             $table->foreignId('userID')
-                ->nullable(false)
+                ->nullable(true)
                 ->constrained('users');
         });
     }

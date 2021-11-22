@@ -63,7 +63,7 @@
         <div class="toast-header">
             <i class="far fa-check-circle green"></i>
             <strong class="mr-auto ml-1">Finalizado</strong>
-            <small>{{ $time }}</small>
+            <small>{{ Time() }}</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">

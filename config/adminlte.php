@@ -313,7 +313,7 @@ return [
                 ],
                 [
                     'text' => 'Eliminar',
-                    'url'  => '#',
+                    'url'  => 'admin/licores/eliminar',
                 ],
 
             ],
@@ -324,7 +324,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Gestionar mesa',
-                    'url'  => '#',
+                    'url'  => 'admin/mesas/gestionar',
                 ],
 
             ],

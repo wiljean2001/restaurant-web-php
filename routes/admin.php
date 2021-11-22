@@ -3,6 +3,8 @@
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DrinkController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SpiritController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('', function () {
@@ -32,4 +34,20 @@ Route::post('bebidas/eliminar', [DrinkController::class, 'destroy'])->name('drin
 Route::get('bebidas/editar', [DrinkController::class, 'edit'])->name('drink.edit');
 Route::post('bebidas/editar', [DrinkController::class, 'update'])->name('drink.update');
 
+
 // plato/registrar
+
+
+
+
+///licores
+
+Route::get('licores/eliminar', [SpiritController::class, 'delete'])->name('spirit.delete');
+Route::post('licores/eliminar', [SpiritController::class, 'destroy'])->name('spirit.distroy');
+
+//mesas
+
+Route::get('mesas/gestionar',[TableController::class,'index'])->name('table.index');
+Route::post('mesas/gestionar',[TableController::class,'update'])->name('table.update');
+
+Route::post('mesas/gestionar',[TableController::class,'create'])->name('table.create');

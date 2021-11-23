@@ -15,6 +15,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         back()->with('orderId', '' . $request->session()->get('orderId'));
+        back()->with('tableID', '' . $request->session()->get('tableID'));
         $tables = Table::all();
         $dishes = DB::table('Dishes')
             ->select(['id', 'name', 'description', 'price', 'stock', 'image'])
@@ -43,6 +44,95 @@ class OrderController extends Controller
         if ($orders->save()) {
             $this->idOrder = $orders->id;
         }
-        return redirect()->route('menu-restaurant')->with('orderId', '' . $orders->id);
+        return redirect()->route('menu-restaurant')
+            ->with('orderId', '' . $orders->id)
+            ->with('tableID', $request->idTable);
+    }
+    public function show(Request $request, $idTable)
+    {
+        // select d.id, d.name, d.price, d.description, d.image, dio.quantify, t.num_table from dishes d 
+        // inner join dish_orders dio ON d.id = dio.dishID
+        // inner join orders o ON o.id = dio.orderID
+        // inner join tables t ON t.id = o.tableID
+        // where t.id = 1;
+        $heads = $this->getHeads();
+        $config = $this->getConfig();
+        back()->with('orderId', '' . $request->session()->get('orderId'));
+        back()->with('tableID', '' . $request->session()->get('tableID'));
+        $dishes = [];
+        $spirits = [];
+        $drinks = [];
+        if ($request->session()->get('tableID') == $idTable) {
+            $dishes = Dish::select('dishes.id', 'dishes.name', 'dishes.price', 'dishes.description', 'dishes.image', 'dish_orders.quantify', 'tables.num_table', 'dish_orders.price as total')
+                ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dishID')
+                ->join('orders', 'dish_orders.orderID', '=', 'orders.id')
+                ->join('tables', 'orders.tableID', '=', 'tables.id')
+                ->where('tables.id', '=', $request->session()->get('tableID'))
+                ->where('orders.id', '=', $request->session()->get('orderId'))
+                ->get();
+            $drinks = Drink::select('drinks.id', 'drinks.name', 'drinks.price', 'drinks.description', 'drinks.image', 'drink_orders.quantify', 'tables.num_table', 'drink_orders.price as total')
+                ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drinkID')
+                ->join('orders', 'drink_orders.orderID', '=', 'orders.id')
+                ->join('tables', 'orders.tableID', '=', 'tables.id')
+                ->where('tables.id', '=', $request->session()->get('tableID'))
+                ->where('orders.id', '=', $request->session()->get('orderId'))
+                ->get();
+            $spirits = Spirit::select('spirits.id', 'spirits.name', 'spirits.price', 'spirits.description', 'spirits.image', 'spirit_orders.quantify', 'tables.num_table', 'spirit_orders.price as total')
+                ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spiritID')
+                ->join('orders', 'spirit_orders.orderID', '=', 'orders.id')
+                ->join('tables', 'orders.tableID', '=', 'tables.id')
+                ->where('tables.id', '=', $request->session()->get('tableID'))
+                ->where('orders.id', '=', $request->session()->get('orderId'))
+                ->get();
+            // print_r($dishes);
+            // printf($dishes); pruebas
+        }
+        return view('orders.show', compact('dishes', 'drinks', 'spirits', 'heads', 'config'));
+    }
+
+    private function getHeads()
+    {
+        return $heads = [
+            ['label' => 'ID', 'width' => 0],
+            'Nombre',
+            'Precio unit.',
+            ['label' => 'Descripcion', 'width' => 40],
+            ['label' => 'Imagen', 'no-export' => true, 'width' => 13],
+            ['label' => 'Cantidad', 'width' => 10],
+            ['label' => 'Mesa', 'width' => 3],
+            ['label' => 'Precio Total', 'width' => 0],
+        ];
+    }
+    private function getConfig()
+    {
+        return $config = [
+            "lengthMenu" => [
+                [10, 25, 50, -1],
+                ['10 Resultados', '25 Resultados', '50 Resultados', 'Motrar Todos'],
+            ],
+            "language" => [
+                // "pageLength" => "Mostrar %d Registros",
+                "lengthMenu" => "Ver _MENU_",
+                "search" => "Buscar",
+                "zeroRecords" => "Sin resultados",
+                "info" => "Página _PAGE_ de _PAGES_",
+                "infoEmpty" => "No hay registros disponibles",
+                "infoFiltered" => "(filtrado de _MAX_ registros totales)",
+                "paginate" => [
+                    "previous" => '<i class="fa fa-angle-left"></i><span class="sr-only">Previous</span>',
+                    "next" => '<i class="fa fa-angle-right"></i><span class="sr-only">Next</span>',
+                ],
+            ],
+            'columns' => [
+                null,
+                null,
+                null,
+                null,
+                ['orderable' => false],
+                null,
+                null,
+                null
+            ],
+        ];
     }
 }

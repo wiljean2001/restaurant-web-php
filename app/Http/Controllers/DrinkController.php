@@ -12,7 +12,7 @@ class DrinkController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $drinks = Drink::all();
-        return view('drinks.show', compact('heads', 'drinks', 'config'));
+        return view('admin.drinks.show', compact('heads', 'drinks', 'config'));
     }
 
     public function create()
@@ -20,7 +20,7 @@ class DrinkController extends Controller
         $time = date('m-d-Y h:i:s a');
         // back()->with('error', '');
         // back()->with('message', '');
-        return view('drinks.add', compact('time'));
+        return view('admin.drinks.add', compact('time'));
     }
     public function store(Request $request)
     {
@@ -51,14 +51,14 @@ class DrinkController extends Controller
             back()->with('error', 'true');
         }
 
-        return redirect()->route('drink.create', $drinkObj); 
-        }  
-        
-        public function show(Drink $drinks)
+        return redirect()->route('drink.create', $drinkObj);
+    }
+
+    public function show(Drink $drinks)
     {
         $heads = $this->getHeads();
         $config = $this->getConfig();
-        return view('drinks.delete', compact('heads', 'drinks', 'config'));
+        return view('admin.drinks.delete', compact('heads', 'drinks', 'config'));
     }
 
     public function edit()
@@ -66,7 +66,7 @@ class DrinkController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $drinks = Drink::all();
-        return view('drinks.update', compact('heads', 'drinks', 'config'));
+        return view('admin.drinks.update', compact('heads', 'drinks', 'config'));
     }
 
     public function update(Request $request)
@@ -101,7 +101,8 @@ class DrinkController extends Controller
                     'price' => $request->price
                 ]);
         }
-        return $this->edit();
+        // return $this->edit();
+        return redirect()->route('drink.edit');
     }
 
     public function destroy(Request $request)
@@ -120,7 +121,7 @@ class DrinkController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $drinks = Drink::all();
-        return view('drinks.delete', compact('heads', 'drinks', 'config'));
+        return view('admin.drinks.delete', compact('heads', 'drinks', 'config'));
     }
 
     private function getHeads()
@@ -166,5 +167,4 @@ class DrinkController extends Controller
             ],
         ];
     }
-
 }

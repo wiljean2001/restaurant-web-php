@@ -12,7 +12,7 @@ class DishController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $dishes = Dish::all();
-        return view('dishes.show', compact('heads', 'dishes', 'config'));
+        return view('admin.dishes.show', compact('heads', 'dishes', 'config'));
     }
 
     public function create()
@@ -20,7 +20,7 @@ class DishController extends Controller
         $time = date('m-d-Y h:i:s a');
         // back()->with('error', '');
         // back()->with('message', '');
-        return view('dishes.add', compact('time'));
+        return view('admin.dishes.add', compact('time'));
     }
     public function store(Request $request)
     {
@@ -58,7 +58,7 @@ class DishController extends Controller
     {
         $heads = $this->getHeads();
         $config = $this->getConfig();
-        return view('dishes.delete', compact('heads', 'dishes', 'config'));
+        return view('admin.dishes.delete', compact('heads', 'dishes', 'config'));
     }
 
     public function edit()
@@ -66,7 +66,7 @@ class DishController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $dishes = Dish::all();
-        return view('dishes.update', compact('heads', 'dishes', 'config'));
+        return view('admin.dishes.update', compact('heads', 'dishes', 'config'));
     }
 
     public function update(Request $request)
@@ -101,7 +101,8 @@ class DishController extends Controller
                     'price' => $request->price
                 ]);
         }
-        return $this->edit();
+        return redirect()->route('dish.edit');
+        // return $this->edit();
     }
 
     public function destroy(Request $request)
@@ -120,7 +121,7 @@ class DishController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $dishes = Dish::all();
-        return view('dishes.delete', compact('heads', 'dishes', 'config'));
+        return view('admin.dishes.delete', compact('heads', 'dishes', 'config'));
     }
 
     private function getHeads()

@@ -16,6 +16,7 @@ class CreateSpiritOrdersTable extends Migration
         Schema::create('spirit_orders', function (Blueprint $table) {
             $table->id();
             $table->integer('quantify')->nullable(false);
+            $table->double('price')->nullable(false);
             $table->timestamps();
             $table->foreignId('spiritID')
                 ->nullable(false)

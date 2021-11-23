@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Spirit;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ class SpiritController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $spirits = Spirit::all();
-        return view('spirits.show', compact('heads', 'spirits', 'config'));
+        return view('admin.spirits.show', compact('heads', 'spirits', 'config'));
     }
 
     public function create()
@@ -19,7 +20,7 @@ class SpiritController extends Controller
         $time = date('m-d-Y h:i:s a');
         // back()->with('error', '');
         // back()->with('message', '');
-        return view('spirits.add', compact('time'));
+        return view('admin.spirits.add', compact('time'));
     }
     public function store(Request $request)
     {
@@ -50,14 +51,14 @@ class SpiritController extends Controller
             back()->with('error', 'true');
         }
 
-        return redirect()->route('Spirit.create', $spiritObj); 
-        }  
-        
-        public function show(Spirit $drinks)
+        return redirect()->route('spirit.create', $spiritObj);
+    }
+
+    public function show(Spirit $drinks)
     {
         $heads = $this->getHeads();
         $config = $this->getConfig();
-        return view('Spirits.delete', compact('heads', 'Spirits', 'config'));
+        return view('admin.spirits.delete', compact('heads', 'Spirits', 'config'));
     }
 
     public function edit()
@@ -65,7 +66,7 @@ class SpiritController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $spirits = Spirit::all();
-        return view('Spirits.update', compact('heads', 'Spirits', 'config'));
+        return view('admin.spirits.update', compact('heads', 'Spirits', 'config'));
     }
 
     public function update(Request $request)
@@ -100,7 +101,8 @@ class SpiritController extends Controller
                     'price' => $request->price
                 ]);
         }
-        return $this->edit();
+        // return $this->edit();
+        return redirect()->route('spirit.edit');
     }
 
     public function destroy(Request $request)
@@ -119,7 +121,7 @@ class SpiritController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $spirits = Spirit::all();
-        return view('spirits.delete', compact('heads', 'spirits', 'config'));
+        return view('admin.spirits.delete', compact('heads', 'spirits', 'config'));
     }
 
     private function getHeads()
@@ -165,5 +167,4 @@ class SpiritController extends Controller
             ],
         ];
     }
-
 }

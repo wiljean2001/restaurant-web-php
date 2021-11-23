@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DrinkController;
 use App\Http\Controllers\OrderController;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('', function () {
     // return view('admin');
     return view('admin');
-});
+})->name('admin.auth');
 
 // Route::get('pestañas', function () {
 //     return view('adminIFrame');
@@ -35,9 +36,8 @@ Route::get('bebidas/editar', [DrinkController::class, 'edit'])->name('drink.edit
 Route::post('bebidas/editar', [DrinkController::class, 'update'])->name('drink.update');
 
 
-// plato/registrar
-
-
+// roles
+Route::get('roles/mostrar', [RoleController::class, 'index'])->name('role.show');
 
 
 ///licores
@@ -51,3 +51,12 @@ Route::get('mesas/gestionar',[TableController::class,'index'])->name('table.inde
 Route::post('mesas/gestionar',[TableController::class,'update'])->name('table.update');
 
 Route::post('mesas/gestionar',[TableController::class,'create'])->name('table.create');
+
+
+
+
+
+// ignorar
+// Route::get('prueba/perfil', function(){
+//     return view('profile');    
+// });

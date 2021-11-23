@@ -1,7 +1,12 @@
-@extends('layouts.order')
+{{-- @extends('layouts.order') --}}
+@extends('adminlte::page')
+@section('title', 'Orden')
 
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/order.css') }}">
+@stop
 @section('content')
-
+{{-- HEADER --}}
 <div class="header py-0 py-lg-0 bi-header h-auto">
   <nav class="nav justify-content-end py-lg-4 py-4 px-lg-3 px-3">
     <a class="nav-link text-dark outline-white" href="{{ route('login') }}">
@@ -35,49 +40,74 @@
   </div>
 </div>
 
-{{-- menu order --}}
-<nav class="container navbar navbar-expand-lg navbar-light">
-  <div class="container-fluid">
-    <div class="collapse navbar-collapse">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item mr-3 mr-lg-3">
-          <x-adminlte-button icon="fas fa-stream" label="Ver platos" data-toggle="modal" class="btn btn-primary" />
-        </li>
-        <li class="nav-item mr-3 mr-lg-3">
-          <x-adminlte-button icon="fas fa-stream" label="Ver bebidas" data-toggle="modal" class="btn btn-primary" />
-        </li>
-        <li class="nav-item">
-          <x-adminlte-button icon="fas fa-stream" label="Ver licores" data-toggle="modal" class="btn btn-primary" />
-        </li>
-
-      </ul>
-      <div class="d-flex">
-        <form action="{{ route('order.create') }}" method="POST" class="d-flex flex-row">
-          @csrf
-          <select name="idTable" class="mr-3 mr-lg-3">
-            <option hidden selected>Mesas disponibles:</option>
-            @foreach ($tables as $table)
-            @if ($table->state == false)
-            <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
-            @endif
-            @endforeach
-          </select>
-          <div class="mr-3 mr-lg-3">
-            <x-adminlte-input name="idOrder" placeholder="" igroup-size="lg" disabled class="bg-white" id="idOrder">
-              <x-slot name="prependSlot">
-                <div class="input-group-text ">
-                  {{ __('Orden:') }}
-                </div>
-              </x-slot>
-            </x-adminlte-input>
-          </div>
-          <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
-            class="btn btn-primary mr-5 mr-lg-5" name="submit" />
-        </form>
-      </div>
-    </div>
+{{-- MENU DROP DOWN --}}
+<div class="btn-flotante">
+  <input type="checkbox" id="btn-mas">
+  <div class="redes">
+    <a href="{{ route('order.show', Session::get('tableID')) }}"><i class="fas fa-eye"></i></a>
+    <a href="#"><i class="fas fa-minus-square"></i></a>
+    <a href="#"><i class="fas fa-edit"></i></a>
   </div>
-</nav>
+  <div class="btn-mas">
+    <label for="btn-mas" class="fa fa-plus"></label>
+  </div>
+</div>
+
+
+{{-- menu order --}}
+
+<div class="container card d-flex flex-row justify-content-between py-2 py-lg-2 align-items-stretch">
+  <ul class="navbar-nav d-flex justify-content-start flex-row align-items-center flex-wrap">
+    <li class="nav-item mr-3 mr-lg-3">
+      <x-adminlte-button icon="fas fa-stream" label="Ver platos" data-toggle="modal" class="btn btn-primary"
+        id="to-dish" />
+    </li>
+    <li class="nav-item mr-3 mr-lg-3">
+      <x-adminlte-button icon="fas fa-stream" label="Ver bebidas" data-toggle="modal" class="btn btn-primary"
+        id="to-drink" />
+    </li>
+    <li class="nav-item">
+      <x-adminlte-button icon="fas fa-stream" label="Ver licores" data-toggle="modal" class="btn btn-primary"
+        id="to-spirit" />
+    </li>
+  </ul>
+  <form action="{{ route('order.create') }}" method="POST">
+    @csrf
+    <ul class="navbar-nav d-flex justify-content-end flex-row align-items-lg-center flex-wrap">
+      <li class="nav-item mr-3 mr-lg-3">
+        <x-adminlte-select name="idTable" label-class="text-lightblue" igroup-size="lg">
+          <x-slot name="prependSlot">
+            <div class="input-group-text">
+              {{ __('Mesas disponibles:') }}
+            </div>
+          </x-slot>
+          @if (Session::has('tableID'))
+          <option value="{{ Session::get('tableID') }}" selected>Mesa {{ Session::get('tableID') }}</option>
+          @endif
+
+          @foreach ($tables as $table)
+          @if ($table->state == false)
+          <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
+          @endif
+          @endforeach
+        </x-adminlte-select>
+      </li>
+      <li class="nav-item mr-3 mr-lg-3">
+        <x-adminlte-input name="isOrder" igroup-size="lg" disabled class="bg-white" id="isOrder">
+          <x-slot name="prependSlot">
+            <div class="input-group-text">
+              {{ __('Orden:') }}
+            </div>
+          </x-slot>
+        </x-adminlte-input>
+      </li>
+      <li class="nav-item">
+        <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
+          class="btn btn-primary mr-5 mr-lg-5" name="submit" />
+      </li>
+    </ul>
+  </form>
+</div>
 
 {{-- Listar Platos / cards de platos --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
@@ -85,10 +115,10 @@
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($dishes as $dish)
 
-    <div class="card" style="width: 22rem; margin-bottom: 20px">
-      <img class="card-img-top h-50" src="{{ asset('files/dishes/' . $dish->image) }}" alt="Plato a pedir">
+    <div class="card text-center" style="width: 22rem; margin-bottom: 20px;">
+      <img class="card-img-top" src="{{ asset('files/dishes/' . $dish->image) }}" alt="Plato a pedir">
       <div class="card-body">
-        <h4 class="card-title">{{ $dish->name }}</h4>
+        <h2 class="card-title h4">{{ $dish->name }}</h2>
         <p class="card-text">{{ $dish->description }}</p>
       </div>
       <ul class="list-group list-group-flush">
@@ -96,8 +126,8 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $dish->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
-          class="btn btn-primary modalDish" />
+        <x-adminlte-button id="{{ $dish->id }}" name="{{ $dish->price }}" icon="fas fa-plus text-red" label="Agregar"
+          data-toggle="modal" class="btn btn-primary modalDish" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -132,8 +162,8 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $drink->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
-          class="btn btn-primary modalDrink" />
+        <x-adminlte-button id="{{ $dish->id }}" name="{{ $drink->price }}" icon="fas fa-plus text-red" label="Agregar"
+          data-toggle="modal" class="btn btn-primary modalDrink" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -165,8 +195,8 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $spirit->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $dish->id }}" icon="fas fa-plus text-red" label="Agregar" data-toggle="modal"
-          class="btn btn-primary modalSpirit" />
+        <x-adminlte-button id="{{ $dish->id }}" name="{{ $spirit->price }}" icon="fas fa-plus text-red" label="Agregar"
+          data-toggle="modal" class="btn btn-primary modalSpirit" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
@@ -180,12 +210,14 @@
   </div>
 </div>
 
+{{-- Message --}}
 @if (Session::has('message'))
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5">
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5 w-auto">
   <!-- Then put toasts within -->
-  <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
+    data-delay="5000">
     <div class="toast-header">
-      <i class="far fa-check-circle green"></i>
+      <i class="far fa-check-circle green rounded me-2"></i>
       <strong class="mr-auto ml-1">Finalizado</strong>
       <small>{{ date('m-d-Y h:i:s a'); }}</small>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -195,8 +227,26 @@
     </div>
   </div>
 </div>
-
 @endif
+{{-- Message Error --}}
+@if (Session::has('error'))
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
+    data-delay="5000">
+    <div class="toast-header bg-red ">
+      <i class="far fa-check-circle green"></i>
+      <strong class="mr-auto ml-1">Error</strong>
+      <small>{{ date('m-d-Y h:i:s a'); }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-red-400">
+      {{ Session::get('error') }}
+    </div>
+  </div>
+</div>
+@endif
+
 <!-- Modal ADMINLTE ----------  Para platos -->
 <x-adminlte-modal id="ModalDishes" title="Agregar plato al pedido" size="lg" theme="teal" icon="fas fa-bell" v-centered
   static-backdrop scrollable>
@@ -205,6 +255,7 @@
       @csrf
       <input type="text" name="id" id="idDi" hidden>
       <input type="text" name="idOrder" id="idDiOrder" hidden>
+      <input type="text" name="priceDish" id="priceDish" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
         <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar; Ejem.: 4"
           required name="quantify">
@@ -226,8 +277,10 @@
       @csrf
       <input type="text" name="id" id="idDr" hidden>
       <input type="text" name="idOrder" id="idDrOrder" hidden>
+      <input type="text" name="priceDrink" id="priceDrink" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
-        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4"
+          name="quantify" required>
         <label for="floatingInput">Cantidad</label>
       </div>
     </div>
@@ -244,10 +297,12 @@
   <form action="{{ route('spirit.orders.store') }}" method="POST" class="text-center">
     <div>
       @csrf
-      <input type="text" name="id" id="idSpOrder" hidden>
-      <input type="text" name="idOrder" id="idSp" hidden>
+      <input type="text" name="id" id="idSp" hidden>
+      <input type="text" name="idOrder" id="idSpOrder" hidden>
+      <input type="text" name="priceSpirit" id="priceSpirit" hidden>
       <div class="form-floating mb-3 mx-3 mx-lg-3">
-        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4">
+        <input type="number" class="form-control" id="floatingInput" placeholder="Cantidad a solicitar, ejem.: 4"
+          name="quantify" required>
         <label for="floatingInput">Cantidad</label>
       </div>
     </div>
@@ -278,58 +333,78 @@
     </div>
   </div>
 </div> --}}
-
-
-@endsection
-
+@stop
+@extends('layouts.footers.footer')
 
 @section('js')
+
 <script>
   $(document).ready(function() {
-            $('.modalDish').click(function() {
-              var id = this.id;
-              $('#idDi').val(id);
-              $('#idDiOrder').val({{ Session::get('orderId') }});
-              $('#ModalDishes').modal({
-               show: true
-              });
-            });
-            $('.modalDrink').click(function() {
-              var id = this.id;
-              $('#idDr').val(id);
-              $('#idDrOrder').val({{ Session::get('orderId') }});
-              $('#ModalDrinks').modal({
-                  show: true
-              });
-
-            });
-            $('.modalSpirit').click(function() {
-              var id = this.id;
-              $('#idSp').val(id);
-              $('#idSpOrder').val({{ Session::get('orderId') }});
-              $('#ModalSpirits').modal({
-                  show: true
-              });
-            });
-        });
+    $('.modalDish').click(function() {
+      var id = this.id;
+      var name = this.name;
+      // dish id
+      $('#idDi').val(id);
+      $('#priceDish').val(name);
+      // dish orders id
+      $('#idDiOrder').val({{ Session::get('orderId') }});
+      $('#ModalDishes').modal({
+        show: true
+      });
+    });
+    $('.modalDrink').click(function() {
+      var id = this.id;
+      var name = this.name;
+      $('#idDr').val(id);
+      $('#priceDrink').val(name);
+      $('#idDrOrder').val({{ Session::get('orderId') }});
+      $('#ModalDrinks').modal({
+          show: true
+      });
+    });
+    $('.modalSpirit').click(function() {
+      var id = this.id;
+      var name = this.name;
+      $('#idSp').val(id);
+      $('#priceSpirit').val(name);
+      $('#idSpOrder').val({{ Session::get('orderId') }});
+      $('#ModalSpirits').modal({
+          show: true
+      });
+    });
+  });
 </script>
 <script>
   $('#to-button').on("click", function() {
-            // presentar la cuenta de clicks realizados sobre el elemento con id "prueba"
-            setTimeout(() => {
-                window.scrollTo({
-                    left: 0,
-                    top: (window.screen.height / 1.1),
-                    behavior: "smooth"
-                });
-            });
-        });
+    // presentar la cuenta de clicks realizados sobre el elemento con id "prueba"
+    setTimeout(() => {
+      window.scrollTo({
+        left: 0,
+        // top: (window.screen.height / 1.1),
+        top: window.innerHeight,
+        behavior: "smooth"
+      });
+    });
+  });
+  $('#to-dish').on("click", function() {
+
+  });
+  $('#to-drink').on("click", function() {
+
+  });
+  $('#to-spirit').on("click", function() {
+    this.scrollIntoView(true);
+  });
 </script>
 
 <script>
   $(document).ready(function() {
     var idOrder = {{ Session::get('orderId') }};
       $("#idOrder").val(idOrder);
+      if (idOrder) {
+        $("#isOrder").val('Generado');
+      }
+      $('.toast').toast('show');
   });
 </script>
-@endsection
+@stop

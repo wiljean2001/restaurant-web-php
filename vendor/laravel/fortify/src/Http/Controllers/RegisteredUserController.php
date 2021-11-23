@@ -52,6 +52,7 @@ class RegisteredUserController extends Controller
                           CreatesNewUsers $creator): RegisterResponse
     {
         event(new Registered($user = $creator->create($request->all())));
+        $user->roles()->sync($request->idRole);
 
         $this->guard->login($user);
 

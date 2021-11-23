@@ -16,6 +16,7 @@ class CreateDishOrdersTable extends Migration
         Schema::create('dish_orders', function (Blueprint $table) {
             $table->id();
             $table->integer('quantify')->nullable(false);
+            $table->double('price')->nullable(false);
             $table->timestamps();
             $table->foreignId('dishID')
                 ->nullable(false)

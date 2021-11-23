@@ -16,6 +16,7 @@ class CreateDrinkOrdersTable extends Migration
         Schema::create('drink_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('quantify')->nullable(false);
+            $table->double('price')->nullable(false);
             $table->timestamps();
             // $table->foreign('drinkID')->references('drinkID')->on('drinks');
             $table->foreignId('drinkID')

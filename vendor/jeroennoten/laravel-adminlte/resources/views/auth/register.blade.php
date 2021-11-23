@@ -17,6 +17,8 @@
     <form action="{{ $register_url }}" method="post">
         @csrf
 
+        <input type="number" name="idRole" value="1" hidden>
+
         {{-- Name field --}}
         <div class="input-group mb-3">
             <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"

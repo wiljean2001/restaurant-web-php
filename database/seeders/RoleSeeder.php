@@ -15,8 +15,18 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
+        // Role de admnistrador (Publicar y adminitrara roles)
         $role1 = Role::create(['name' => 'admin']);
-        $permission = Permission::create(['name' => 'admin.auth', 'description' => 'Todos los permisos'])->assignRole($role1);
+        // Role de publisher (Solo publicar)
+        $role2 = Role::create(['name' => 'publisher']);
+
+        // asignacion de permisos para los roles
+        $permission = Permission::create(['name' => 'admin.auth', 'description' => 'Todos los permisos'])
+            ->assignRole([$role1, $role2]);
+        $permission = Permission::create(['name' => 'admin.roles', 'description' => 'Administrar roles'])
+            ->syncRoles([$role1]);
+
         // syncRoles([])   => asignar(relacionar) permisos a varios roles
+        // 
     }
 }

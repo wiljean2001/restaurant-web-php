@@ -36,9 +36,14 @@ Route::get('bebidas/editar', [DrinkController::class, 'edit'])->name('drink.edit
 Route::post('bebidas/editar', [DrinkController::class, 'update'])->name('drink.update');
 
 ///licores
-
+Route::get('licor/registrar', [SpiritController::class, 'create'])->name('spirit.create');
+Route::get('licor/buscar', [SpiritController::class, 'index'])->name('spirit.search');
+Route::post('licores', [SpiritController::class, 'store'])->name('spirit.store');
 Route::get('licores/eliminar', [SpiritController::class, 'delete'])->name('spirit.delete');
 Route::post('licores/eliminar', [SpiritController::class, 'destroy'])->name('spirit.distroy');
+Route::get('licores/editar', [SpiritController::class, 'edit'])->name('spirit.edit');
+Route::post('licores/editar', [SpiritController::class, 'update'])->name('spirit.update');
+
 
 //mesas
 

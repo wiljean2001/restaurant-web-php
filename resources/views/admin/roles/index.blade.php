@@ -3,26 +3,47 @@
 @section('title', 'Roles')
 
 @section('content')
-
-<div class="container-fluid w-auto">
-  <div class="row">
-    <h1 class="my-lg-2 my-2">MOSTRAR ROLES</h1>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Descripción</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($roles as $rol)
-        <tr>
-          <th scope="row">{!! $rol->id !!}</th>
-          <td>{!! $rol->description !!}</td>
-        </tr>
-        @endforeach
-      </tbody>
-    </table>
+<div class="d-flex flex-wrap flex-row justify-content-around">
+  <div class="text-center container">
+    <h1 class="py-lg-2 py-2 text-left">MOSTRAR ROLES Y USUARIOS</h1>
+    <form action="{{ route('role.update') }}" method="POST">
+      @csrf
+      <table class="table text-left  px-5 px-lg-5">
+        <thead>
+          <tr>
+            <th scope="col">Usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Rol</th>
+            <th scope="col">Cambiar rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($users as $row)
+          <tr>
+            {{-- $users = User::select('users.id as userID', 'users.name as userName',
+            'roles.id as rolID','roles.name as
+            rolName') --}}
+            <td>{!! $row->userName !!}</td>
+            <td>{!! $row->userEmail !!}</td>
+            <td>{!! $row->rolName !!}</td>
+            <td>
+              <input type="number" name="idUser[]" value="{!! $row->userID !!}" hidden>
+              <select class="form-select" name="uptoRol[]">
+                @foreach ($roles as $rol)
+                @if ($rol->name == $row->rolName)
+                <option value="{!! $rol->id !!}" selected>{!! $rol->name !!}</option>
+                @else
+                <option value="{!! $rol->id !!}">{!! $rol->name !!}</option>
+                @endif
+                @endforeach
+              </select>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+      <x-adminlte-button type="submit" label="GUARDAR CAMBIOS" theme="warning" icon="fas fa-pen-square" />
+    </form>
   </div>
 </div>
 @stop

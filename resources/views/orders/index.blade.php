@@ -52,8 +52,6 @@
     <label for="btn-mas" class="fa fa-plus"></label>
   </div>
 </div>
-
-
 {{-- menu order --}}
 
 <div class="container card d-flex flex-row justify-content-between py-2 py-lg-2 align-items-stretch">
@@ -135,10 +133,6 @@
     @endforeach
 
   </div>
-  {{-- paginacion --}}
-  <div class="pagination justify-content-center m-lg-3 m-3">
-    {{ $dishes->links() }}
-  </div>
 </div>
 
 {{-- Listar Sugerencias --}}
@@ -171,10 +165,6 @@
     @endforeach
 
   </div>
-  {{-- paginacion --}}
-  <div class="pagination justify-content-center m-lg-3 m-3">
-    {{ $drinks->links() }}
-  </div>
 </div>
 
 {{-- Listar Licores / cards de licores --}}
@@ -204,10 +194,10 @@
     @endforeach
 
   </div>
-  {{-- paginacion --}}
-  <div class="pagination justify-content-center m-lg-3 m-3">
-    {{ $spirits->links() }}
-  </div>
+</div>
+{{-- paginacion --}}
+<div class="pagination justify-content-center m-lg-3 m-3">
+  {{ $spirits->links() }}
 </div>
 
 {{-- Message --}}
@@ -312,27 +302,6 @@
     <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
   </x-slot>
 </x-adminlte-modal>
-
-<!-- Modal Boostrap-->
-{{-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{ route('order.dish.store') }}" method="POST">
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary">Solicitar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div> --}}
 @stop
 @extends('layouts.footers.footer')
 

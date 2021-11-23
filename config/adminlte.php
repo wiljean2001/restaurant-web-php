@@ -230,7 +230,7 @@ return [
         [
             'type'         => 'navbar-search',
             'text'         => 'Buscar',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
         [
             'type'         => 'fullscreen-widget',
@@ -341,14 +341,13 @@ return [
         //     'target'  => '_blank|_self|_parent|_top|framename',
         //     'url'     => 'admin',
         // ],
-        ['header' => 'Roles'],
+        ['header' => 'Roles', 
+        'can' => ['admin.roles']],
         [
             'text' => 'Mostrar',
-            // 'url'  => 'admin/settings',
             'url'  => 'admin/roles/mostrar',
-            'icon_color' => 'red',
-            // 'icon' => 'fas fa-fw fa-user',
-            'text_color' => 'success',
+            'icon' => 'fas fa-user-tag',
+            'can' => ['admin.roles'],
         ],
         ['header' => 'Perfil'],
         [

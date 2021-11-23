@@ -35,11 +35,6 @@ Route::post('bebidas/eliminar', [DrinkController::class, 'destroy'])->name('drin
 Route::get('bebidas/editar', [DrinkController::class, 'edit'])->name('drink.edit');
 Route::post('bebidas/editar', [DrinkController::class, 'update'])->name('drink.update');
 
-
-// roles
-Route::get('roles/mostrar', [RoleController::class, 'index'])->name('role.show');
-
-
 ///licores
 Route::get('licor/registrar', [SpiritController::class, 'create'])->name('spirit.create');
 Route::get('licor/buscar', [SpiritController::class, 'index'])->name('spirit.search');
@@ -59,8 +54,9 @@ Route::post('mesas/gestionar',[TableController::class,'create'])->name('table.cr
 
 
 
-
-
+// roles
+Route::get('roles/mostrar', [RoleController::class, 'index'])->middleware('can:admin.roles')->name('role.show');
+Route::post('roles/actualizar', [RoleController::class, 'update'])->middleware('can:admin.roles')->name('role.update');
 // ignorar
 // Route::get('prueba/perfil', function(){
 //     return view('profile');    

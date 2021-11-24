@@ -22,10 +22,10 @@
                     <td>{!! $row->stock !!} uds.</td>
                     <td>
                         <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit">
-                            <i class="fa fa-lg fa-fw fa-pen"></i>
+                            <i class="fas fa-mug-hot"></i>
                         </button>
                         <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="Delete">
-                            <i class="fa fa-lg fa-fw fa-trash"></i>
+                            <i class="far fa-lemon"></i>
                         </button>
                     </td>
                 </tr>

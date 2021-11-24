@@ -25,6 +25,7 @@ Route::post('platos', [DishController::class, 'store'])->name('dish.store');
 Route::get('platos/eliminar', [DishController::class, 'delete'])->name('dish.delete');
 Route::post('platos/eliminar', [DishController::class, 'destroy'])->name('dish.distroy');
 Route::get('platos/editar', [DishController::class, 'edit'])->name('dish.edit');
+Route::get('platos/editar/{dishID}', [DishController::class, 'editIn'])->name('dish.update.dishID');
 Route::post('platos/editar', [DishController::class, 'update'])->name('dish.update');
 // drink routes
 Route::get('bebida/registrar', [DrinkController::class, 'create'])->name('drink.create');
@@ -47,10 +48,10 @@ Route::post('licores/editar', [SpiritController::class, 'update'])->name('spirit
 
 //mesas
 
-Route::get('mesas/gestionar',[TableController::class,'index'])->name('table.index');
-Route::post('mesas/gestionar',[TableController::class,'update'])->name('table.update');
+Route::get('mesas/gestionar', [TableController::class, 'index'])->name('table.index');
+Route::post('mesas/gestionar', [TableController::class, 'update'])->name('table.update');
 
-Route::post('mesas/gestionar',[TableController::class,'create'])->name('table.create');
+Route::post('mesas/gestionar', [TableController::class, 'create'])->name('table.create');
 
 
 

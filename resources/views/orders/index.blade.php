@@ -53,63 +53,65 @@
   </div>
 </div>
 {{-- menu order --}}
-
-<div class="container card d-flex flex-row justify-content-between py-2 py-lg-2 align-items-stretch">
-  <ul class="navbar-nav d-flex justify-content-start flex-row align-items-center flex-wrap">
-    <li class="nav-item mr-3 mr-lg-3">
-      <x-adminlte-button icon="fas fa-stream" label="Ver platos" data-toggle="modal" class="btn btn-primary"
-        id="to-dish" />
-    </li>
-    <li class="nav-item mr-3 mr-lg-3">
-      <x-adminlte-button icon="fas fa-stream" label="Ver bebidas" data-toggle="modal" class="btn btn-primary"
-        id="to-drink" />
-    </li>
-    <li class="nav-item">
-      <x-adminlte-button icon="fas fa-stream" label="Ver licores" data-toggle="modal" class="btn btn-primary"
-        id="to-spirit" />
-    </li>
-  </ul>
-  <form action="{{ route('order.create') }}" method="POST">
-    @csrf
-    <ul class="navbar-nav d-flex justify-content-end flex-row align-items-lg-center flex-wrap">
-      <li class="nav-item mr-3 mr-lg-3">
-        <x-adminlte-select name="idTable" label-class="text-lightblue" igroup-size="lg">
-          <x-slot name="prependSlot">
-            <div class="input-group-text">
-              {{ __('Mesas disponibles:') }}
-            </div>
-          </x-slot>
-          @if (Session::has('tableID'))
-          <option value="{{ Session::get('tableID') }}" selected>Mesa {{ Session::get('tableID') }}</option>
-          @endif
-
-          @foreach ($tables as $table)
-          @if ($table->state == false)
-          <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
-          @endif
-          @endforeach
-        </x-adminlte-select>
-      </li>
-      <li class="nav-item mr-3 mr-lg-3">
-        <x-adminlte-input name="isOrder" igroup-size="lg" disabled class="bg-white" id="isOrder">
-          <x-slot name="prependSlot">
-            <div class="input-group-text">
-              {{ __('Orden:') }}
-            </div>
-          </x-slot>
-        </x-adminlte-input>
+<div class="bg-white">
+  <nav id="navbar-example2" class="navbar navbar-light bg-white px-3" data-bs-spy="scroll">
+    {{-- <a class="navbar-brand" href="#">Navbar</a> --}}
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link" href="#scrollspyHeading1">
+          <i class="fas fa-stream"></i> Ver platos</a>
       </li>
       <li class="nav-item">
-        <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
-          class="btn btn-primary mr-5 mr-lg-5" name="submit" />
+        <a class="nav-link" href="#scrollspyHeading2">
+          <i class="fas fa-stream"></i> Ver bebidas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#scrollspyHeading3">
+          <i class="fas fa-stream"></i> Ver licores</a>
       </li>
     </ul>
-  </form>
+    <ul class="nav nav-pills ">
+      <form action="{{ route('order.create') }}" method="POST" class="d-flex flex-row flex-wrap justify-content-around">
+        @csrf
+        <li class="nav-item mr-4 mr-lg-4">
+          <x-adminlte-select name="idTable" label-class="text-lightblue" igroup-size="sm">
+            <x-slot name="prependSlot">
+              <div class="input-group-text">
+                {{ __('Mesas:') }}
+              </div>
+            </x-slot>
+            @if (Session::has('tableID'))
+            <option value="{{ Session::get('tableID') }}" selected>Mesa {{ Session::get('tableID') }}</option>
+            @endif
+
+            @foreach ($tables as $table)
+            @if ($table->state == false)
+            <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
+            @endif
+            @endforeach
+          </x-adminlte-select>
+        </li>
+        <li class="nav-item mr-4 mr-lg-4">
+          <x-adminlte-input name="isOrder" igroup-size="sm" disabled class="bg-white" id="isOrder">
+            <x-slot name="prependSlot">
+              <div class="input-group-text">
+                {{ __('Orden:') }}
+              </div>
+            </x-slot>
+          </x-adminlte-input>
+        </li>
+        <li class="nav-item">
+          <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
+            class="btn btn-primary mr-5 mr-lg-5" name="submit" />
+        </li>
+      </form>
+    </ul>
+  </nav>
 </div>
 
 {{-- Listar Platos / cards de platos --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
-  <h1 class=" my-4">Menu de platos</h1>
+  <h1 class=" my-4" id="scrollspyHeading1">Menu de platos</h1>
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($dishes as $dish)
 
@@ -140,7 +142,7 @@
 
 {{-- Listar Bebidas / cards de bebidas --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
-  <h1 class=" my-4">Menu de bebidas</h1>
+  <h1 class=" my-4" id="scrollspyHeading2">Menu de bebidas</h1>
 
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($drinks as $drink)
@@ -169,7 +171,7 @@
 
 {{-- Listar Licores / cards de licores --}}
 <div class="container text-center card w-80 mb-lg-5 mb-5">
-  <h1 class=" my-4">Menu de licores</h1>
+  <h1 class=" my-4" id="scrollspyHeading3">Menu de licores</h1>
 
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($spirits as $spirit)
@@ -302,6 +304,7 @@
     <x-adminlte-button theme="danger" label="Cerrar" data-dismiss="modal" />
   </x-slot>
 </x-adminlte-modal>
+
 @stop
 @extends('layouts.footers.footer')
 

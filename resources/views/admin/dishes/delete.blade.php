@@ -25,7 +25,8 @@
                     </td>
                     <td>{!! $row->stock !!} uds.</td>
                     <td>
-                        <input type="checkbox" name="idDel[]" class="checkbox" value="{!! $row->id !!}">
+                        <input type="checkbox" name="idDel[]" class="" value="{!! $row->id !!}">
+
                     </td>
                 </tr>
                 @endforeach

@@ -301,15 +301,15 @@ return [
             'submenu' => [
                 [
                     'text' => 'Registrar',
-                    'url'  => '#',
+                    'url'  => 'admin/licor/resgistrar',
                 ],
                 [
                     'text' => 'Buscar',
-                    'url'  => '#',
+                    'url'  => 'admin/licor/buscar',
                 ],
                 [
                     'text' => 'Actualizar',
-                    'url'  => '#',
+                    'url'  => 'admin/licores/actualizar',
                 ],
                 [
                     'text' => 'Eliminar',

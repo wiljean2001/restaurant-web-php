@@ -66,14 +66,17 @@ class DishController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $dishes = Dish::all();
+
         return view('admin.dishes.update', compact('heads', 'dishes', 'config'));
     }
-    public function editIn(Request $request)
+    public function editIn(Request $request, $dishID)
     {
         $heads = $this->getHeads();
         $config = $this->getConfig();
+        $upToDish = Dish::where('id', '=', $dishID)->get();
         $dishes = Dish::all();
-        return view('admin.dishes.update', compact('heads', 'dishes', 'config'));
+
+        return view('admin.dishes.update', compact('heads', 'dishes', 'upToDish', 'config'));
     }
 
     public function update(Request $request)

@@ -301,7 +301,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Registrar',
-                    'url'  => 'admin/licor/resgistrar',
+                    'url'  => 'admin/licor/registrar',
                 ],
                 [
                     'text' => 'Buscar',
@@ -309,7 +309,7 @@ return [
                 ],
                 [
                     'text' => 'Actualizar',
-                    'url'  => 'admin/licores/actualizar',
+                    'url'  => 'admin/licores/editar',
                 ],
                 [
                     'text' => 'Eliminar',
@@ -341,8 +341,10 @@ return [
         //     'target'  => '_blank|_self|_parent|_top|framename',
         //     'url'     => 'admin',
         // ],
-        ['header' => 'Roles', 
-        'can' => ['admin.roles']],
+        [
+            'header' => 'Roles',
+            'can' => ['admin.roles']
+        ],
         [
             'text' => 'Mostrar',
             'url'  => 'admin/roles/mostrar',

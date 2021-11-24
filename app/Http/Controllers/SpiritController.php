@@ -66,7 +66,7 @@ class SpiritController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $spirits = Spirit::all();
-        return view('admin.spirits.update', compact('heads', 'Spirits', 'config'));
+        return view('admin.spirits.update', compact('heads', 'spirits', 'config'));
     }
 
     public function update(Request $request)

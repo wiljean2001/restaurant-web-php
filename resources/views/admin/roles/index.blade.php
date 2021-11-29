@@ -46,7 +46,22 @@
     </form>
   </div>
 </div>
-@stop
+
+<div class="mt-4 mt-lg-4">
+  <a href="{{ route('register') }}" class="btn btn-xs btn-default text-primary mx-1 shadow text-right" title="Edit">
+    <i class="fas fa-user-plus"></i>
+    {{ __('Registrar Usuario') }}
+  </a>
+  <a href="" class="btn btn-xs btn-default text-primary mx-1 shadow text-right" title="Edit">
+    <i class="fas fa-user-edit"></i>
+    {{ __('Editar Usuario') }}
+  </a>
+  <a href="" class="btn btn-xs btn-default text-primary mx-1 shadow text-right" title="Edit">
+    <i class="fas fa-user-minus"></i>
+    {{ __('Eliminar Usuario') }}
+  </a>
+</div>
+  @stop
 @extends('layouts.footers.footer')
 
 

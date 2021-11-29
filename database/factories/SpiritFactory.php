@@ -22,7 +22,7 @@ class SpiritFactory extends Factory
             'name' => $nombre,
             'price' => $this->faker->randomFloat(2, 10, 300),
             'description' => $description,
-            'image' => $this->faker->image(public_path('files/spirits'), 640, 480, 'spirits', false, true),
+            // 'image' => $this->faker->image(public_path('files/spirits'), 640, 480, 'spirits', false, true),
             'stock' => $this->faker->randomFloat(0, 1, 500),
             'created_at' => now(),
             'updated_at' => now()

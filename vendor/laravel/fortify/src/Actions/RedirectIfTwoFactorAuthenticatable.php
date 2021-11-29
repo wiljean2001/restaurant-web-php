@@ -99,7 +99,8 @@ class RedirectIfTwoFactorAuthenticatable
         $this->limiter->increment($request);
 
         throw ValidationException::withMessages([
-            Fortify::username() => [trans('auth.failed')],
+            // auth.failed
+            Fortify::username() => [trans('Usuario no encontrado')],
         ]);
     }
 

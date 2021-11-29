@@ -16,7 +16,11 @@
                 <td>S/ {!! $row->price !!}</td>
                 <td>{!! $row->description !!}</td>
                 <td>
-                    <img src="{!! asset('files/dishes/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
+                    @if ($row->image)
+                    <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50">
+                    @else
+                    <img src="{!! asset('img/dishes.png') !!}" alt="imagen-plato" class=" w-50">
+                    @endif
                 </td>
                 <td>{!! $row->stock !!} uds.</td>
                 <td>

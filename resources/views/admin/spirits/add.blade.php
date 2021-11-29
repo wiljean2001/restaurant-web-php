@@ -11,15 +11,13 @@
             <div class="col-md-8">
                 <label for="name">Ingresar licor</label>
                 <div class="form-group">
-                    <input type="text" class="form-control focused w-100" placeholder="Tequila" name="name"
-                        required>
+                    <input type="text" class="form-control focused w-100" placeholder="Tequila" name="name" required>
                 </div>
             </div>
             <div class="col-md-8">
                 <label for="description">Ingresar descripción</label>
                 <div class="form-group">
-                    <textarea class="form-control" placeholder="Tequila Blanco" name="description"
-                        required></textarea>
+                    <textarea class="form-control" placeholder="Tequila Blanco" name="description" required></textarea>
                 </div>
             </div>
             <div class="col-md-8">
@@ -31,19 +29,20 @@
             <div class="col-md-8">
                 <label for="price">Ingresar stock ud.</label>
                 <div class="form-group">
-                    <input type="number" class="form-control" plac  eholder="150" name="stock" required>
+                    <input type="number" class="form-control" placeholder="150" name="stock" required>
                 </div>
             </div>
             <div class="col-md-8">
                 <label for="image">Ingresar imagen</label>
                 <div class="form-group">
-                    <div class="custom-file">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFileLang" lang="es" name="image"
-                                required accept="image/*">
-                            <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
-                        </div>
-                    </div>
+                    <x-adminlte-input-file id="customFileLang" name="image" lang="es"
+                        placeholder="Seleccionar imagen..." igroup-size="lg" legend="Choose" required accept="image/*">
+                        <x-slot name="prependSlot">
+                            <div class="input-group-text text-primary">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                        </x-slot>
+                    </x-adminlte-input-file>
                 </div>
             </div>
             <div class="mb-4 mb-lg-4 text-center">
@@ -55,48 +54,42 @@
         </form>
     </div>
 </div>
-@if (Session::has('message'))
 
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5">
+@if (Session::has('message'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
     <!-- Then put toasts within -->
     <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
         <div class="toast-header">
             <i class="far fa-check-circle green"></i>
             <strong class="mr-auto ml-1">Finalizado</strong>
-            <small>{{ $time }}</small>
+            <small>{{ date('m-d-Y h:i:s a') }}</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            Registro realizado exitosamente!.
+            {{ Session::get('message') }}
         </div>
     </div>
 </div>
 @endif
-@if (Session::has('error'))
 
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5">
+@if (Session::has('error'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
     <!-- Then put toasts within -->
     <div id="toast1" class="toast bg-red" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
         <div class="toast-header ">
             <i class="fas fa-exclamation-triangle"></i>
             {{-- <img src="{{ asset('favicon/dishx24.png') }}" class="rounded me-2" alt="icono-dish"> --}}
             <strong class="mr-auto ml-1">Error</strong>
-            <small>{{ $time }}</small>
+            <small>{{ date('m-d-Y h:i:s a') }}</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-            No se pudo realizar el registro
+            {{ Session::get('error') }}
         </div>
     </div>
 </div>
 @endif
 @stop
 @extends('layouts.footers.footer')
-
-@section('js')
-<script>
-    $(document).ready(function(){
-        $('.toast').toast('show');
-    });
-</script>
-@stop

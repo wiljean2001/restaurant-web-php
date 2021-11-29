@@ -7,11 +7,13 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SpiritController;
 use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 Route::get('', function () {
     // return view('admin');
     return view('admin');
 })->name('admin.auth');
+
 
 // Route::get('pestañas', function () {
 //     return view('adminIFrame');
@@ -25,8 +27,8 @@ Route::post('platos', [DishController::class, 'store'])->name('dish.store');
 Route::get('platos/eliminar', [DishController::class, 'delete'])->name('dish.delete');
 Route::post('platos/eliminar', [DishController::class, 'destroy'])->name('dish.distroy');
 Route::get('platos/editar', [DishController::class, 'edit'])->name('dish.edit');
-Route::get('platos/editar/{dishID}', [DishController::class, 'editIn'])->name('dish.update.dishID');
-Route::post('platos/editar', [DishController::class, 'update'])->name('dish.update');
+// Route::get('platos/editar/{dishID}', [DishController::class, 'editIn'])->name('dish.update.dishID');
+Route::put('platos/actualizar', [DishController::class, 'update'])->name('dish.update');
 // drink routes
 Route::get('bebida/registrar', [DrinkController::class, 'create'])->name('drink.create');
 Route::get('bebida/buscar', [DrinkController::class, 'index'])->name('drink.search');
@@ -49,9 +51,10 @@ Route::post('licores/editar', [SpiritController::class, 'update'])->name('spirit
 //mesas
 
 Route::get('mesas/gestionar', [TableController::class, 'index'])->name('table.index');
-Route::post('mesas/gestionar', [TableController::class, 'update'])->name('table.update');
+Route::post('mesas/actualizar', [TableController::class, 'update'])->name('table.update');
+Route::post('mesas/eliminar', [TableController::class, 'delete'])->name('table.delete');
+Route::post('mesas/registrar', [TableController::class, 'create'])->name('table.create');
 
-Route::post('mesas/gestionar', [TableController::class, 'create'])->name('table.create');
 
 
 

@@ -1,9 +1,6 @@
 @extends('adminlte::page')
 
 @section('title', 'licor')
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/order.css') }}">
-@stop
 @section('content')
 
 <div class="container-fluid w-auto">
@@ -21,7 +18,11 @@
                     <td>S/ {!! $row->price !!}</td>
                     <td>{!! $row->description !!}</td>
                     <td>
-                        <img src="{!! asset('files/spirits/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
+                        @if ($row->image)
+                        <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50">
+                        @else
+                        <img src="{!! asset('img/spirits.png') !!}" alt="imagen-plato" class=" w-50">
+                        @endif
                     </td>
                     <td>{!! $row->stock !!} uds.</td>
                     <td>
@@ -39,6 +40,45 @@
         </div>
     </form>
 </div>
+
+@if (Session::has('message'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+    <!-- Then put toasts within -->
+    <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header">
+            <i class="far fa-check-circle green"></i>
+            <strong class="mr-auto ml-1">Finalizado</strong>
+            <small>{{ date('m-d-Y h:i:s a') }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ Session::get('message') }}
+            Eliminación realizado exitosamente!.
+        </div>
+    </div>
+</div>
+@endif
+
+@if (Session::has('error'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+    <!-- Then put toasts within -->
+    <div id="toast1" class="toast bg-red" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header ">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{-- <img src="{{ asset('favicon/dishx24.png') }}" class="rounded me-2" alt="icono-dish"> --}}
+            <strong class="mr-auto ml-1">Error</strong>
+            <small>{{ date('m-d-Y h:i:s a') }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ Session::get('error') }}
+        </div>
+    </div>
+</div>
+@endif
+
 @endsection
 @extends('layouts.footers.footer')
 {{--

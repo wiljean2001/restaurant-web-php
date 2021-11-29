@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
+use Exception;
 use Illuminate\Http\Request;
 
 class TableController extends Controller
@@ -12,20 +13,50 @@ class TableController extends Controller
         $heads = $this->getHeads();
         $config = $this->getConfig();
         $tables = Table::all();
-        return view("tables.index", compact('heads','tables','config'));
+        return view("admin.tables.index", compact('heads', 'tables', 'config'));
     }
-    public function update()
+
+    public function create(Request $request)
     {
+        $table = new Table();
+        $table->num_table = $request->num_table;
+        $table->state = false;
+        if ($table->save()) {
+            back()->with('message', 'Registro realizada exitosamente!.');
+        } else {
+            back()->with('error', 'Error de registro, si el error perdura por favor reportarlo.');
+        }
+        return redirect()->route('table.index');
     }
-    public function create()
+
+    public function update(Request $request)
     {
-        # code...
+        try {
+            Table::where('id', '=', $request->id)
+                ->update(['num_table' => $request->nameTable]);
+            back()->with('message', 'Actualizacion realizada exitosamente!.');
+        } catch (Exception $exec) {
+            back()->with('error', 'El nombre de la mesa ya existe, inserte un nuevo nombre.');
+        }
+        return redirect()->route('table.index');
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $result = Table::where('id', '=', $request->id)->delete();
+            back()->with('message', 'Tabla eliminada exitosamente!.');
+        } catch (Exception $exec) {
+            back()->with('error', 'Error al eliminar la mesa. Mesa ocuapada por un proceso de orden, por favor espere que finalice dicho proceso');
+        }
+
+        return redirect()->route('table.index');
     }
     private function getHeads()
     {
         return $heads = [
             ['label' => 'id', 'width' => 0],
-            'Nombre de tabla',
+            ['label' => 'Nombre de tabla', 'width' => 05],
             ['label' => 'Accion', 'no-export' => true, 'width' => 3]
 
         ];
@@ -52,8 +83,8 @@ class TableController extends Controller
             ],
             'columns' => [
                 null,
-                null,   
-                ['ordenable'=>false]           
+                null,
+                ['orderable' => false]
             ],
         ];
     }

@@ -8,8 +8,7 @@ use Illuminate\Support\Str;
 class TableFactory extends Factory
 {
     private $str = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n',
-        'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     ];
     private $num = [
         '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'

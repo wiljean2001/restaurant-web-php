@@ -1,7 +1,6 @@
 @extends('adminlte::page')
 
 @section('title', 'Pllato')
-
 @section('content')
 <div class="d-flex flex-row w-100 flex-wrap">
     <div class="w-50">
@@ -9,6 +8,7 @@
         <form action=" {{ route('dish.update') }}" method="POST" class="d-flex flex-column"
             enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <input type="text" name="id" id="id" hidden>
             <div class="col-md-auto">
                 <label for="name">Ingresar plato</label>
@@ -40,13 +40,14 @@
             <div class="col-md-auto col-lg-auto">
                 <label for="image">Ingresar imagen</label>
                 <div class="form-group">
-                    <div class="custom-file">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFileLang" lang="es" name="image"
-                                accept="image/*">
-                            <label class="custom-file-label" for="customFileLang">Seleccionar imagen</label>
-                        </div>
-                    </div>
+                    <x-adminlte-input-file id="customFileLang" name="image" lang="es"
+                        placeholder="Seleccionar imagen..." igroup-size="lg" legend="Choose" accept="image/*">
+                        <x-slot name="prependSlot">
+                            <div class="input-group-text text-primary">
+                                <i class="fas fa-file-upload"></i>
+                            </div>
+                        </x-slot>
+                    </x-adminlte-input-file>
                 </div>
             </div>
             <div class="col-md-auto text-center mt-4 mt-lg-4">
@@ -68,7 +69,11 @@
                 </td>
                 <td>{!! $row->description !!}</td>
                 <td>
-                    <img src="{!! asset('files/dishes/'.$row->image) !!}" alt="imagen-plato" class=" w-50">
+                    @if ($row->image)
+                    <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50">
+                    @else
+                    <img src="{!! asset('img/dishes.png') !!}" alt="imagen-plato" class=" w-50">
+                    @endif
                 </td>
                 <td>
                     {!! $row->stock !!}
@@ -85,9 +90,46 @@
         </x-adminlte-datatable>
     </div>
 </div>
-@stop
-@extends('layouts.footers.footer')
 
+@if (Session::has('message'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+    <!-- Then put toasts within -->
+    <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header">
+            <i class="far fa-check-circle green"></i>
+            <strong class="mr-auto ml-1">Finalizado</strong>
+            <small>{{ Time() }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ Session::get('message') }}
+        </div>
+    </div>
+</div>
+@endif
+
+@if (Session::has('error'))
+<div aria-live="polite" aria-atomic="true"
+    class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+    <!-- Then put toasts within -->
+    <div id="toast1" class="toast bg-red" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+        <div class="toast-header ">
+            <i class="fas fa-exclamation-triangle"></i>
+            {{-- <img src="{{ asset('favicon/dishx24.png') }}" class="rounded me-2" alt="icono-dish"> --}}
+            <strong class="mr-auto ml-1">Error</strong>
+            <small>{{ $time }}</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            {{ Session::get('error') }}
+        </div>
+    </div>
+</div>
+@endif
+
+@extends('layouts.footers.footer')
+@stop
 
 @push('js')
 <script>
@@ -103,6 +145,6 @@
         $('#descript').val(data[3]);
         $('#stock').val(parseInt(data[5]));
         // console.log(data);
-});
+}); 
 </script>
 @endpush

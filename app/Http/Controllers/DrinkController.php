@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Drink;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DrinkController extends Controller
 {
@@ -17,10 +20,7 @@ class DrinkController extends Controller
 
     public function create()
     {
-        $time = date('m-d-Y h:i:s a');
-        // back()->with('error', '');
-        // back()->with('message', '');
-        return view('admin.drinks.add', compact('time'));
+        return view('admin.drinks.add');
     }
     public function store(Request $request)
     {
@@ -32,33 +32,33 @@ class DrinkController extends Controller
             'stock' => 'required'
         ]);
 
-        $drinkObj = new Drink();
-        $drinkObj->name = $request->name;
-        $drinkObj->description = $request->description;
-        $drinkObj->price = $request->price;
-        $drinkObj->stock = $request->stock;
+        $drinkObj = Drink::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock
+        ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path() . '/files/drinks/', $filename);
-            $drinkObj->image = $filename;
+            $url = Storage::put('img/dishes', $request->file('image'));
+            $drinkObj->image()->create(['url' => $url]);
         }
 
         if ($drinkObj->save()) {
-            back()->with('message', 'true');
+            back()->with('message', 'Registro realizado exitosamente!.');
         } else {
-            back()->with('error', 'true');
+            back()->with('error', 'No se pudo realizar el registro.');
         }
 
         return redirect()->route('drink.create', $drinkObj);
     }
 
-    public function show(Drink $drinks)
+    public function show() // Drink $drinks
     {
-        $heads = $this->getHeads();
-        $config = $this->getConfig();
-        return view('admin.drinks.delete', compact('heads', 'drinks', 'config'));
+
+        // $heads = $this->getHeads();
+        // $config = $this->getConfig();
+        // return view('admin.drinks.delete', compact('heads', 'drinks', 'config'));
     }
 
     public function edit()
@@ -78,29 +78,40 @@ class DrinkController extends Controller
             'stock' => 'required'
         ]);
 
-        if ($request->image) {
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path() . '/files/drinks/', $filename);
+        $drink = Drink::where('id', $request->id)->first();
+        $drink->name = $request->name;
+        $drink->description = $request->description;
+        $drink->price = $request->price;
+        $drink->stock = $request->stock;
+        // dd($dish);
+        if ($request->hasFile('image')) {
+            $image = Image::where('imageable_id', $drink->id)
+                ->where('imageable_type', 'App\Models\Drink')->first();
+
+            $url = Storage::put('img/drinks', $request->file('image'));
+
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/drinks/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+
+                $image->url = $url;
+                $image->save();
+            } else {
+                $drink->image()->create(['url' => $url]);
             }
-            Drink::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'image' => $filename,
-                    'price' => $request->price
-                ]);
-        } else {
-            Drink::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'price' => $request->price
-                ]);
         }
+
+        if ($drink->save()) {
+            back()->with('message', 'Actualizacion realizado exitosamente!.');
+        } else {
+            back()->with('error', 'No se pudo realizar el registro.');
+        }
+
         // return $this->edit();
         return redirect()->route('drink.edit');
     }
@@ -110,8 +121,25 @@ class DrinkController extends Controller
         $request->validate([
             'idDel' => 'required',
         ]);
-        foreach ($request->idDel as $dish) {
-            Drink::where('id', '=', $dish)->delete();
+        foreach ($request->idDel as $drink) {
+            $image = Image::where('imageable_id', $drink)
+                ->where('imageable_type', 'App\Models\Drink')->first();
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/dishes/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+                $image->delete();
+            }
+            Drink::where('id', '=', $drink)->delete();
+        }
+        if ($request->idDel != null) {
+            back()->with('message', 'Eliminación realizado exitosamente!.');
+        } else {
+            back()->with('error', 'Ninguna bebida selecionado.');
         }
         return redirect()->route('drink.delete');
     }

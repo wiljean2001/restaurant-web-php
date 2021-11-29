@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dish;
+use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DishController extends Controller
 {
@@ -17,10 +20,9 @@ class DishController extends Controller
 
     public function create()
     {
-        $time = date('m-d-Y h:i:s a');
         // back()->with('error', '');
         // back()->with('message', '');
-        return view('admin.dishes.add', compact('time'));
+        return view('admin.dishes.add');
     }
     public function store(Request $request)
     {
@@ -31,27 +33,25 @@ class DishController extends Controller
             'image' => 'required',
             'stock' => 'required'
         ]);
-
-        $dishObj = new Dish();
-        $dishObj->name = $request->name;
-        $dishObj->description = $request->description;
-        $dishObj->price = $request->price;
-        $dishObj->stock = $request->stock;
+        $dishObj = Dish::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock
+        ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path() . '/files/dishes/', $filename);
-            $dishObj->image = $filename;
+            $url = Storage::put('img/dishes', $request->file('image'));
+            $dishObj->image()->create(['url' => $url]);
         }
 
         if ($dishObj->save()) {
-            back()->with('message', 'true');
+            back()->with('message', 'Registro realizado exitosamente!.');
         } else {
-            back()->with('error', 'true');
+            back()->with('error', 'No se pudo realizar el registro.');
         }
 
-        return redirect()->route('dish.create', $dishObj);
+        return redirect()->route('dish.create');
     }
 
     public function show(Dish $dishes)
@@ -67,11 +67,12 @@ class DishController extends Controller
         $config = $this->getConfig();
         $dishes = Dish::all();
 
-        return view('admin.dishes.update', compact('heads', 'dishes', 'upToDish', 'config'));
+        return view('admin.dishes.update', compact('heads', 'dishes', 'config'));
     }
 
     public function update(Request $request)
     {
+        // Se valida los request para cada campo.
         $request->validate([
             'name' => 'required',
             'description' => 'required',
@@ -79,30 +80,41 @@ class DishController extends Controller
             'stock' => 'required'
         ]);
 
-        if ($request->image) {
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path() . '/files/dishes/', $filename);
+        $dish = Dish::where('id', $request->id)->first();
+        $dish->name = $request->name;
+        $dish->description = $request->description;
+        $dish->price = $request->price;
+        $dish->stock = $request->stock;
+        // dd($dish);
+        if ($request->hasFile('image')) {
+            $image = Image::where('imageable_id', $dish->id)
+                ->where('imageable_type', 'App\Models\Dish')->first();
+
+            $url = Storage::put('img/dishes', $request->file('image'));
+
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/dishes/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+
+                $image->url = $url;
+                $image->save();
+            } else {
+                $dish->image()->create(['url' => $url]);
             }
-            Dish::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'image' => $filename,
-                    'price' => $request->price
-                ]);
-        } else {
-            Dish::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'price' => $request->price
-                ]);
         }
-        return redirect()->route('dish.edit');
+
+        if ($dish->save()) {
+            back()->with('message', 'Actualizacion realizado exitosamente!.');
+        } else {
+            back()->with('error', 'No se pudo realizar la actualización.');
+        }
+
+        return redirect()->route('dish.edit', $dish);
         // return $this->edit();
     }
 
@@ -112,7 +124,24 @@ class DishController extends Controller
             'idDel' => 'required',
         ]);
         foreach ($request->idDel as $dish) {
+            $image = Image::where('imageable_id', $dish)
+                ->where('imageable_type', 'App\Models\Dish')->first();
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/dishes/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+                $image->delete();
+            }
             Dish::where('id', '=', $dish)->delete();
+        }
+        if ($request->idDel != null) {
+            back()->with('message', 'Eliminación realizado exitosamente!.');
+        } else {
+            back()->with('error', 'Ningun plato selecionado.');
         }
         return redirect()->route('dish.delete');
     }

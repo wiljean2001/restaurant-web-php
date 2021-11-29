@@ -17,7 +17,11 @@
                     <td>S/ {!! $row->price !!}</td>
                     <td>{!! $row->description !!}</td>
                     <td>
-                        <img src="{!! asset('files/spirits/'.$row->image) !!}" alt="imagen-licor" class=" w-50">
+                        @if ($row->image)
+                        <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50">
+                        @else
+                        <img src="{!! asset('img/spirits.png') !!}" alt="imagen-plato" class=" w-50">
+                        @endif
                     </td>
                     <td>{!! $row->stock !!} uds.</td>
                     <td>
@@ -33,6 +37,15 @@
             </x-adminlte-datatable>
     </div>
 </div>
+{{-- <div class="w-50">
+    <div class="ratio ratio-16x9">
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/wamSB76G6kw" title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div> --}}
+
 @stop
 @extends('layouts.footers.footer')
 

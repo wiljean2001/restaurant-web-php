@@ -1,10 +1,7 @@
-{{-- @extends('layouts.order') --}}
 @extends('adminlte::page')
+
 @section('title', 'Orden')
 
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/order.css') }}">
-@stop
 @section('content')
 {{-- HEADER --}}
 <div class="header py-0 py-lg-0 bi-header h-auto">
@@ -44,7 +41,9 @@
 <div class="btn-flotante">
   <input type="checkbox" id="btn-mas">
   <div class="redes">
-    <a href="{{ route('order.show', Session::get('tableID')) }}"><i class="fas fa-eye"></i></a>
+    <a href="{{ route('order.show', Session::get('tableID')) }}" title="Ver orden" data-bs-toggle="tooltip"
+      data-bs-placement="left" id="tooltip">
+      <i class="fas fa-eye"></i></a>
     <a href="#"><i class="fas fa-minus-square"></i></a>
     <a href="#"><i class="fas fa-edit"></i></a>
   </div>
@@ -53,7 +52,7 @@
   </div>
 </div>
 {{-- menu order --}}
-<div class="bg-white">
+<div class="bg-white container">
   <nav id="navbar-example2" class="navbar navbar-light bg-white px-3" data-bs-spy="scroll">
     {{-- <a class="navbar-brand" href="#">Navbar</a> --}}
     <ul class="nav nav-pills">
@@ -110,13 +109,17 @@
 </div>
 
 {{-- Listar Platos / cards de platos --}}
-<div class="container text-center card w-80 mb-lg-5 mb-5">
+<div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
   <h1 class=" my-4" id="scrollspyHeading1">Menu de platos</h1>
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($dishes as $dish)
-
     <div class="card text-center" style="width: 22rem; margin-bottom: 20px;">
-      <img class="card-img-top" src="{{ asset('files/dishes/' . $dish->image) }}" alt="Plato a pedir">
+      @if ($dish->image)
+      <img class="card-img-top" src="{{ asset('storage/' . $dish->image->url) }}" alt="Plato a pedir">
+      @else
+      <img class="card-img-top h-50" src="{{ asset('img/dishes.png') }}" alt="Plato a pedir">
+      @endif
+
       <div class="card-body">
         <h2 class="card-title h4">{{ $dish->name }}</h2>
         <p class="card-text">{{ $dish->description }}</p>
@@ -128,27 +131,25 @@
       <div class="card-body">
         <x-adminlte-button id="{{ $dish->id }}" name="{{ $dish->price }}" icon="fas fa-plus text-red" label="Agregar"
           data-toggle="modal" class="btn btn-primary modalDish" />
-        {{-- <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a> --}}
       </div>
     </div>
     @endforeach
-
   </div>
 </div>
-
 {{-- Listar Sugerencias --}}
 {{-- --}}
 
 {{-- Listar Bebidas / cards de bebidas --}}
-<div class="container text-center card w-80 mb-lg-5 mb-5">
+<div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
   <h1 class=" my-4" id="scrollspyHeading2">Menu de bebidas</h1>
-
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($drinks as $drink)
-
     <div class="card" style="width: 22rem; margin-bottom: 20px">
-      <img class="card-img-top h-50" src="{{ asset('files/drinks/' . $drink->image) }}" alt="Plato a pedir">
+      @if ($drink->image)
+      <img class="card-img-top h-50" src="{{ asset('storage/' . $drink->image->url) }}" alt="Bebida a pedir">
+      @else
+      <img class="card-img-top h-50" src="{{ asset('img/drinks.png') }}" alt="Bebida a pedir">
+      @endif
       <div class="card-body">
         <h5 class="card-title">{{ $drink->name }}</h5>
         <p class="card-text">{{ $drink->description }}</p>
@@ -158,26 +159,27 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $drink->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $dish->id }}" name="{{ $drink->price }}" icon="fas fa-plus text-red" label="Agregar"
+        <x-adminlte-button id="{{ $drink->id }}" name="{{ $drink->price }}" icon="fas fa-plus text-red" label="Agregar"
           data-toggle="modal" class="btn btn-primary modalDrink" />
         {{-- <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a> --}}
       </div>
     </div>
     @endforeach
-
   </div>
 </div>
 
 {{-- Listar Licores / cards de licores --}}
-<div class="container text-center card w-80 mb-lg-5 mb-5">
+<div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
   <h1 class=" my-4" id="scrollspyHeading3">Menu de licores</h1>
-
   <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
     @foreach ($spirits as $spirit)
-
     <div class="card" style="width: 22rem; margin-bottom: 20px">
-      <img class="card-img-top h-50" src="{{ asset('files/spirits/' . $spirit->image) }}" alt="Plato a pedir">
+      @if ($spirit->image)
+      <img class="card-img-top h-50" src="{{ asset('storage/' . $spirit->image->url) }}" alt="Licor a pedir">
+      @else
+      <img class="card-img-top h-50" src="{{ asset('img/spirits.png') }}" alt="Licor a pedir">
+      @endif
       <div class="card-body">
         <h5 class="card-title">{{ $spirit->name }}</h5>
         <p class="card-text">{{ $spirit->description }}</p>
@@ -187,10 +189,8 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $spirit->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $dish->id }}" name="{{ $spirit->price }}" icon="fas fa-plus text-red" label="Agregar"
+        <x-adminlte-button id="{{ $spirit->id }}" name="{{ $spirit->price }}" icon="fas fa-plus text-red" label="Agregar"
           data-toggle="modal" class="btn btn-primary modalSpirit" />
-        {{-- <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a> --}}
       </div>
     </div>
     @endforeach
@@ -306,10 +306,51 @@
 </x-adminlte-modal>
 
 @stop
+
+
+{{-- menssages --}}
+@if (Session::has('message-order'))
+
+<div aria-live="polite" aria-atomic="true"
+  class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    <div class="toast-header">
+      <i class="far fa-check-circle green"></i>
+      <strong class="mr-auto ml-1">Finalizado</strong>
+      <small>{{ Time() }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Orden generada exitosamente!.
+    </div>
+  </div>
+</div>
+@endif
+@if (Session::has('error-order'))
+
+<div aria-live="polite" aria-atomic="true"
+  class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast bg-red" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
+    <div class="toast-header ">
+      <i class="fas fa-exclamation-triangle"></i>
+      {{-- <img src="{{ asset('favicon/dishx24.png') }}" class="rounded me-2" alt="icono-dish"> --}}
+      <strong class="mr-auto ml-1">Error</strong>
+      <small>{{ $time }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      No se pudo generar orden.
+    </div>
+  </div>
+</div>
+@endif
+
+
 @extends('layouts.footers.footer')
 
 @section('js')
-
 <script>
   $(document).ready(function() {
     $('.modalDish').click(function() {
@@ -377,6 +418,9 @@
         $("#isOrder").val('Generado');
       }
       $('.toast').toast('show');
+      var element = document.getElementById('#tooltip');
+      var tooltip = new bootstrap.Tooltip(element, []);
+      tooltip.show();
   });
 </script>
 @stop

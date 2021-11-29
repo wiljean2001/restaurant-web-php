@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Image;
 use App\Models\Spirit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SpiritController extends Controller
 {
@@ -32,33 +35,32 @@ class SpiritController extends Controller
             'stock' => 'required'
         ]);
 
-        $spiritObj = new Spirit();
-        $spiritObj->name = $request->name;
-        $spiritObj->description = $request->description;
-        $spiritObj->price = $request->price;
-        $spiritObj->stock = $request->stock;
+        $spiritkObj = Spirit::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock
+        ]);
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '-' . $file->getClientOriginalName();
-            $file->move(public_path() . '/files/drinks/', $filename);
-            $spiritObj->image = $filename;
+            $url = Storage::put('img/spirits', $request->file('image'));
+            $spiritkObj->image()->create(['url' => $url]);
         }
 
-        if ($spiritObj->save()) {
-            back()->with('message', 'true');
+        if ($spiritkObj->save()) {
+            back()->with('message', 'Registro realizado exitosamente!.');
         } else {
-            back()->with('error', 'true');
+            back()->with('error', 'No se pudo realizar el registro.');
         }
 
-        return redirect()->route('spirit.create', $spiritObj);
+        return redirect()->route('spirit.create');
     }
 
-    public function show(Spirit $drinks)
+    public function show() // Spirit $drinks
     {
-        $heads = $this->getHeads();
-        $config = $this->getConfig();
-        return view('admin.spirits.delete', compact('heads', 'Spirits', 'config'));
+        // $heads = $this->getHeads();
+        // $config = $this->getConfig();
+        // return view('admin.spirits.delete', compact('heads', 'Spirits', 'config'));
     }
 
     public function edit()
@@ -78,29 +80,40 @@ class SpiritController extends Controller
             'stock' => 'required'
         ]);
 
-        if ($request->image) {
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '-' . $file->getClientOriginalName();
-                $file->move(public_path() . '/files/Spirits/', $filename);
+        $spirit = Spirit::where('id', $request->id)->first();
+        $spirit->name = $request->name;
+        $spirit->description = $request->description;
+        $spirit->price = $request->price;
+        $spirit->stock = $request->stock;
+        // dd($dish);
+        if ($request->hasFile('image')) {
+            $image = Image::where('imageable_id', $spirit->id)
+                ->where('imageable_type', 'App\Models\Spirit')->first();
+
+            $url = Storage::put('img/drinks', $request->file('image'));
+
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/drinks/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+
+                $image->url = $url;
+                $image->save();
+            } else {
+                $spirit->image()->create(['url' => $url]);
             }
-            Spirit::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'image' => $filename,
-                    'price' => $request->price
-                ]);
-        } else {
-            Spirit::where('id', $request->id)
-                ->update([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'stock' => $request->stock,
-                    'price' => $request->price
-                ]);
         }
+
+        if ($spirit->save()) {
+            back()->with('message', 'Actualizacion realizado exitosamente!.');
+        } else {
+            back()->with('error', 'No se pudo realizar el registro.');
+        }
+
         // return $this->edit();
         return redirect()->route('spirit.edit');
     }
@@ -110,9 +123,28 @@ class SpiritController extends Controller
         $request->validate([
             'idDel' => 'required',
         ]);
-        foreach ($request->idDel as $dish) {
-            Spirit::where('id', '=', $dish)->delete();
+        // recorrer array de ID`s
+        foreach ($request->idDel as $spirit) {
+            $image = Image::where('imageable_id', $spirit)
+                ->where('imageable_type', 'App\Models\Spirit')->first();
+            if ($image) {
+                if (Storage::exists($image->url)) {
+                    //Mover a una carpeta eliminado
+                    // img/spirits/ => mantener el inicio de la url
+                    // 11 = sustituir solo el nombre de la imagen url en la base de datos
+                    // Tamaño del nombre de la imagen / url.
+                    Storage::move($image->url, 'eliminados/' . Str::substr($image->url, 11, Str::length($image->url)));
+                }
+                $image->delete();
+            }
+            Spirit::where('id', '=', $spirit)->delete();
         }
+        if ($request->idDel != null) {
+            back()->with('message', 'Eliminación realizado exitosamente!.');
+        } else {
+            back()->with('error', 'Ningun licor selecionado.');
+        }
+
         return redirect()->route('spirit.delete');
     }
 

@@ -5,6 +5,7 @@
 @section('adminlte_css')
     @stack('css')
     @yield('css')
+    <link rel="stylesheet" href="{{ asset('css/order.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 @stop
 
@@ -56,4 +57,9 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    <script>
+        $(document).ready(function(){
+            $('.toast').toast('show');
+        });
+    </script>
 @stop

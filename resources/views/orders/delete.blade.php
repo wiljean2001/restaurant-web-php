@@ -1,23 +1,23 @@
 {{-- @extends('layouts.order') --}}
 @extends('adminlte::page')
-@section('title', 'Orden')
+@section('title', 'Eliminar')
 
 @section('content')
 
 <div class="container">
-    <h1 class="my-lg-2 my-2">ORDEN: </h1>
+    <h1 class="my-lg-2 my-2">ORDEN - ELIMINAR: </h1>
     <div class="mx-5 mx-lg-5">
         <x-adminlte-card title="PLASTOS" theme="maroon" theme-mode="full" icon="fas fa-lg fa-bell" collapsible
             maximizable>
             {{-- Dish Table --}}
             <x-adminlte-datatable id="table1" :heads="$heads" theme="" head-theme="dark" :config='$config' with-buttons
                 with-footer hoverable>
-                @if ($Order==null)
+                @if ($dishes==null)
                 <tr>
                     <td rowspan="7">No hay platos solicitados</td>
                 </tr>
                 @else
-                @foreach($Order as $row)
+                @foreach($dishes as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>
                     <td>{!! $row->name !!}</td>
@@ -40,12 +40,12 @@
             {{-- Drink Table --}}
             <x-adminlte-datatable id="table2" :heads="$heads" theme="" head-theme="dark" :config='$config' with-buttons
                 with-footer hoverable>
-                @if ($dishes==null)
+                @if ($drinks==null)
                 <tr>
                     <td rowspan="7">No hay bebidas solicitados</td>
                 </tr>
                 @else
-                @foreach($dishes as $row)
+                @foreach($drinks as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>
                     <td>{!! $row->name !!}</td>
@@ -68,12 +68,12 @@
             {{-- Spirit Table --}}
             <x-adminlte-datatable id="table3" :heads="$heads" theme="" head-theme="dark" :config='$config' with-buttons
                 with-footer hoverable>
-                @if ($Order==null)
+                @if ($spirits==null)
                 <tr>
                     <td rowspan="7">No hay licores solicitados</td>
                 </tr>
                 @else
-                @foreach($Order as $row)
+                @foreach($spirits as $row)
                 <tr>
                     <td>{!! $row->id !!}</td>
                     <td>{!! $row->name !!}</td>

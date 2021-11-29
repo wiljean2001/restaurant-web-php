@@ -18,7 +18,7 @@ class CreateDrinksTable extends Migration
             $table->string('name', 30)->nullable(false);
             $table->double('price')->nullable(false);
             $table->text('description')->nullable(false);
-            $table->string('image', 100)->nullable(false);
+            // $table->string('image', 100)->nullable(false);
             $table->integer('stock')->nullable(false);
             $table->timestamps();
         });

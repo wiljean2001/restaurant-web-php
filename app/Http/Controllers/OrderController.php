@@ -11,18 +11,33 @@ use App\Models\Dish_order;
 use App\Models\Drink_order;
 use App\Models\Spirit_order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        back()->with('orderId', '' . $request->session()->get('orderId'));
-        back()->with('tableID', '' . $request->session()->get('tableID'));
         $tables = Table::all();
         $dishes = Dish::paginate(6);
         $drinks = Drink::paginate(6);
         $spirits = Spirit::paginate(6);
+        // Name end-order -> finaliza la orden
+        if ($request->endOrder) {
+            // Vuelve a la tabla al estado disponible
+            Table::where('id', $request->session()->get('tableID'))
+                ->update([
+                    'state' => false
+                ]);
+            // alerta al mesero que se finalizo una orden.
+            $request->session()->forget('orderId');
+            $request->session()->forget('tableID');
+            back()->with('message-order', 'Orden realizada exitosamente!.');
+            return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables'));
+        }
+
+
+        back()->with('orderId', $request->session()->get('orderId'));
+        back()->with('tableID', $request->session()->get('tableID'));
+        back()->with('dishOrder', $request->session()->has('dishOrder'));
         return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables'));
     }
 
@@ -36,91 +51,163 @@ class OrderController extends Controller
         // $table->state = true;
         $orders = new Order();
         $orders->date = date('Y-m-d h:i:s');
-        $orders->tableID = $request->idTable;
+        $orders->table_id = $request->idTable;
 
         if ($orders->save()) {
-            $this->idOrder = $orders->id;
-            back()->with('message-order', 'true');
+            back()->with('message-order', 'Orden generada exitosamente!.');
         } else {
-            back()->with('error-order', 'true');
+            back()->with('error-order', 'No se pudo generar orden.');
         }
         return redirect()->route('menu-restaurant')
             ->with('orderId', '' . $orders->id)
             ->with('tableID', $request->idTable);
     }
-    public function show(Request $request, $idTable)
+    // , $idTable
+    public function show(Request $request)
     {
-        // select d.id, d.name, d.price, d.description, d.image, dio.quantify, t.num_table from dishes d 
-        // inner join dish_orders dio ON d.id = dio.dishID
-        // inner join orders o ON o.id = dio.orderID
-        // inner join tables t ON t.id = o.tableID
-        // where t.id = 1;
+        if (!$request->session()->has('tableID') && !$request->session()->has('orderId')) {
+            return redirect()->route('menu-restaurant')
+                ->with('error-order', 'Por favor genere una orden.');
+        }
+        // Obtenemos la cabecera y la configuracion de la tabla
         $heads = $this->getHeads();
         $config = $this->getConfig();
-        back()->with('orderId', '' . $request->session()->get('orderId'));
-        back()->with('tableID', '' . $request->session()->get('tableID'));
+        // Inicializar variabels
+        $Order = [];
+        $dishes = [];
+        $drinks = [];
+        $spirits = [];
+
+        back()->with('orderId', $request->session()->get('orderId'));
+        back()->with('tableID', $request->session()->get('tableID'));
+
+        // Eloquent: Relationships 
+        // $dishes_o = Order::with('dish_Orders.dishes')
+        //     ->where('table_id', $request->session()->get('tableID'))
+        //     ->where('id', $request->session()->get('orderId'))->get();
+
+        // // print_r($dishes->dish_orders->dishes);
+
+        // $drinks_o = Order::with('drink_Orders.drinks')
+        //     ->where('table_id', $request->session()->get('tableID'))
+        //     ->where('id', $request->session()->get('orderId'))->get();
+
+        // $spirits_o = Order::with('spirit_Orders.spirits')
+        //     ->where('table_id', $request->session()->get('tableID'))
+        //     ->where('id', $request->session()->get('orderId'))->get();
+
+        // $table = Table::where('id', $request->session()->get('tableID'))->get();
+
+
+        // printf($dishes);
+        // foreach ($dishes as $dish) {
+        //     foreach ($dish->dish_Orders as $dish_o) {
+        //         foreach ($dish_o->image as $dish_o) {
+        //         }
+        //     }
+        // }
+        // printf($dishes_o);
+
+        //  METODO DE JOINS
+        $dishes = Dish::select(
+            'dishes.id',
+            'dishes.name',
+            'dishes.price',
+            'dishes.description',
+            'dish_orders.quantify',
+            'tables.num_table',
+            'dish_orders.price as total'
+        )
+            ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dish_id')
+            ->join('orders', 'dish_orders.order_id', '=', 'orders.id')
+            ->join('tables', 'orders.table_id', '=', 'tables.id')
+            ->where('tables.id', '=', $request->session()->get('tableID'))
+            ->where('orders.id', '=', $request->session()->get('orderId'))
+            ->get();;
+
+        $drinks = Drink::select(
+            'drinks.id',
+            'drinks.name',
+            'drinks.price',
+            'drinks.description',
+            'drink_orders.quantify',
+            'tables.num_table',
+            'drink_orders.price as total'
+        )
+            ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drink_id')
+            ->join('orders', 'drink_orders.order_id', '=', 'orders.id')
+            ->join('tables', 'orders.table_id', '=', 'tables.id')
+            ->where('tables.id', '=', $request->session()->get('tableID'))
+            ->where('orders.id', '=', $request->session()->get('orderId'))
+            ->get();;
+        $spirits = Spirit::select(
+            'spirits.id',
+            'spirits.name',
+            'spirits.price',
+            'spirits.description',
+            'spirit_orders.quantify',
+            'tables.num_table',
+            'spirit_orders.price as total'
+        )
+            ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spirit_id')
+            ->join('orders', 'spirit_orders.order_id', '=', 'orders.id')
+            ->join('tables', 'orders.table_id', '=', 'tables.id')
+            ->where('tables.id', '=', $request->session()->get('tableID'))
+            ->where('orders.id', '=', $request->session()->get('orderId'))
+            ->get();
+
+
+        return view('orders.show', compact('dishes', 'drinks', 'spirits', 'heads', 'config'));
+        //  'drinks', 'spirits'
+        // return view('orders.show', compact(
+        //     'drinks_o',
+        //     'spirits_o',
+        //     'dishes_o',
+        //     'table',
+        //     'heads',
+        //     'config'
+        // ));
+    }
+    public function edit(Request $request)
+    {
+        if (!$request->session()->has('tableID') && !$request->session()->has('orderId')) {
+            back()->with('error-order', 'Por favor genere una orden.');
+            return redirect()->route('menu-restaurant');
+        }
+        $Order = null;
+        $heads = $this->getHeads();
+        $config = $this->getConfig();
+        back()->with('orderId', $request->session()->get('orderId'));
+        back()->with('tableID', $request->session()->get('tableID'));
         $dishes = [];
         $spirits = [];
         $drinks = [];
-        if ($request->session()->get('tableID') == $idTable) {
-            // $Order = Order::where('id', '=', $request->session()->get('orderId'))->get();
-            // $dishes = $Order->dish_Orders()->get();
-            $Order = Order::all();
-            $Order = Order::where('id', $request->session()->get('orderId'))->get();
-            dd($Order);
-            // where('id', '=', $request->session()->get('orderId'))
-            // ->get()->tables()->where('tables.id', '=', $request->session()->get('tableID'));
-            // $dishes = Dish::select(
-            //     'dishes.id',
-            //     'dishes.name',
-            //     'dishes.price',
-            //     'dishes.description',
-            //     'dishes.image',
-            //     'dish_orders.quantify',
-            //     'tables.num_table',
-            //     'dish_orders.price as total'
-            // )
-            //     ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dishID')
-            //     ->join('orders', 'dish_orders.orderID', '=', 'orders.id')
-            //     ->join('tables', 'orders.tableID', '=', 'tables.id')
+        return view('orders.update', compact('Order', 'dishes', 'heads', 'config'));
+    }
 
-            // $drinks = Drink::select(
-            //     'drinks.id',
-            //     'drinks.name',
-            //     'drinks.price',
-            //     'drinks.description',
-            //     'drinks.image',
-            //     'drink_orders.quantify',
-            //     'tables.num_table',
-            //     'drink_orders.price as total'
-            // )
-            //     ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drinkID')
-            //     ->join('orders', 'drink_orders.orderID', '=', 'orders.id')
-            //     ->join('tables', 'orders.tableID', '=', 'tables.id')
-            //     ->where('tables.id', '=', $request->session()->get('tableID'))
-            //     ->where('orders.id', '=', $request->session()->get('orderId'))
-            //     ->get();
-            // $spirits = Spirit::select(
-            //     'spirits.id',
-            //     'spirits.name',
-            //     'spirits.price',
-            //     'spirits.description',
-            //     'spirits.image',
-            //     'spirit_orders.quantify',
-            //     'tables.num_table',
-            //     'spirit_orders.price as total'
-            // )
-            //     ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spiritID')
-            //     ->join('orders', 'spirit_orders.orderID', '=', 'orders.id')
-            //     ->join('tables', 'orders.tableID', '=', 'tables.id')
-            //     ->where('tables.id', '=', $request->session()->get('tableID'))
-            //     ->where('orders.id', '=', $request->session()->get('orderId'))
-            //     ->get();
-            // print_r($dishes);
-            // printf($dishes); pruebas
+    public function update(Request $request)
+    {
+    }
+
+    public function destroy(Request $request)
+    {
+    }
+
+    public function delete(Request $request)
+    {
+        if (!$request->session()->has('tableID') && !$request->session()->has('orderId')) {
+            back()->with('error-order', 'Por favor genere una orden.');
+            return redirect()->route('menu-restaurant');
         }
-        //  'drinks', 'spirits'
-        return view('orders.show', compact('Order', 'dishes', 'heads', 'config'));
+        $Order = null;
+        $heads = $this->getHeads();
+        $config = $this->getConfig();
+        back()->with('orderId', $request->session()->get('orderId'));
+        back()->with('tableID', $request->session()->get('tableID'));
+        $dishes = [];
+        $spirits = [];
+        $drinks = [];
+        return view('orders.delete', compact('Order', 'dishes', 'heads', 'config'));
     }
 
     private function getHeads()
@@ -130,10 +217,10 @@ class OrderController extends Controller
             'Nombre',
             'Precio unit.',
             ['label' => 'Descripcion', 'width' => 40],
-            ['label' => 'Imagen', 'no-export' => true, 'width' => 13],
             ['label' => 'Cantidad', 'width' => 10],
             ['label' => 'Mesa', 'width' => 3],
             ['label' => 'Precio Total', 'width' => 0],
+            ['label' => 'Accion', 'width' => 0],
         ];
     }
     private function getConfig()
@@ -161,11 +248,68 @@ class OrderController extends Controller
                 null,
                 null,
                 null,
-                ['orderable' => false],
+                null,
+                //     ->join('tables', 'orders.tableID', '=', 'tables.id')
                 null,
                 null,
-                null
+                ['orderable' => false]
             ],
         ];
     }
 }
+// Metodo de relaciones con Joins 
+// select d.id, d.name, d.price, d.description, d.image, dio.quantify, t.num_table from dishes d 
+// inner join dish_orders dio ON d.id = dio.dishID
+// inner join orders o ON o.id = dio.orderID
+// inner join tables t ON t.id = o.tableID
+// where t.id = 1;
+// dd($Order);
+// where('id', '=', $request->session()->get('orderId'))
+// ->get()->tables()->where('tables.id', '=', $request->session()->get('tableID'));
+// $dishes = Dish::select(
+//     'dishes.id',
+//     'dishes.name',
+//     'dishes.price',
+//     'dishes.description',
+//     'dishes.image',
+//     'dish_orders.quantify',
+//     'tables.num_table',
+//     'dish_orders.price as total'
+// )
+//     ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dishID')
+//     ->join('orders', 'dish_orders.orderID', '=', 'orders.id')
+
+// $drinks = Drink::select(
+//     'drinks.id',
+//     'drinks.name',
+//     'drinks.price',
+//     'drinks.description',
+//     'drinks.image',
+//     'drink_orders.quantify',
+//     'tables.num_table',
+//     'drink_orders.price as total'
+// )
+//     ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drinkID')
+//     ->join('orders', 'drink_orders.orderID', '=', 'orders.id')
+//     ->join('tables', 'orders.tableID', '=', 'tables.id')
+//     ->where('tables.id', '=', $request->session()->get('tableID'))
+//     ->where('orders.id', '=', $request->session()->get('orderId'))
+//     ->get();
+// $spirits = Spirit::select(
+//     'spirits.id',
+//     'spirits.name',
+//     'spirits.price',
+//     'spirits.description',
+//     'spirits.image',
+//     'spirit_orders.quantify',
+//     'tables.num_table',
+//     'spirit_orders.price as total'
+// )
+//     ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spiritID')
+//     ->join('orders', 'spirit_orders.orderID', '=', 'orders.id')
+//     ->join('tables', 'orders.tableID', '=', 'tables.id')
+//     ->where('tables.id', '=', $request->session()->get('tableID'))
+//     ->where('orders.id', '=', $request->session()->get('orderId'))
+//     ->get();
+// print_r($dishes);
+// printf($dishes); pruebas

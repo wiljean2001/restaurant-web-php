@@ -14,15 +14,15 @@ class CreateDrinkOrdersTable extends Migration
     public function up()
     {
         Schema::create('drink_orders', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigInteger('id');
             $table->integer('quantify')->nullable(false);
             $table->double('price')->nullable(false);
             $table->timestamps();
             // $table->foreign('drinkID')->references('drinkID')->on('drinks');
-            $table->foreignId('drinkID')
+            $table->foreignId('drink_id')
                 ->nullable(false)
                 ->constrained('drinks');
-            $table->foreignId('orderID')
+            $table->foreignId('order_id')
                 ->nullable(false)
                 ->constrained('orders');
         });

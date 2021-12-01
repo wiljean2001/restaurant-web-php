@@ -41,11 +41,13 @@
 <div class="btn-flotante">
   <input type="checkbox" id="btn-mas">
   <div class="redes">
-    <a href="{{ route('order.show', Session::get('tableID')) }}" title="Ver orden" data-bs-toggle="tooltip"
-      data-bs-placement="left" id="tooltip">
+    <a href="{{ route('order.show') }}" title="Ver orden" data-bs-toggle="tooltip" data-bs-placement="left"
+      id="tooltip">
       <i class="fas fa-eye"></i></a>
-    <a href="#"><i class="fas fa-minus-square"></i></a>
-    <a href="#"><i class="fas fa-edit"></i></a>
+    <a href="{{ route('order.edit') }}" title="editar orden">
+      <i class="fas fa-minus-square"></i></a>
+    <a href="{{ route('order.delete') }}" title="eliminar orden">
+      <i class="fas fa-edit"></i></a>
   </div>
   <div class="btn-mas">
     <label for="btn-mas" class="fa fa-plus"></label>
@@ -189,8 +191,8 @@
         <li class="list-group-item"><small class="text-muted">$/ {{ $spirit->price }} </small></li>
       </ul>
       <div class="card-body">
-        <x-adminlte-button id="{{ $spirit->id }}" name="{{ $spirit->price }}" icon="fas fa-plus text-red" label="Agregar"
-          data-toggle="modal" class="btn btn-primary modalSpirit" />
+        <x-adminlte-button id="{{ $spirit->id }}" name="{{ $spirit->price }}" icon="fas fa-plus text-red"
+          label="Agregar" data-toggle="modal" class="btn btn-primary modalSpirit" />
       </div>
     </div>
     @endforeach
@@ -201,43 +203,6 @@
 <div class="pagination justify-content-center m-lg-3 m-3">
   {{ $spirits->links() }}
 </div>
-
-{{-- Message --}}
-@if (Session::has('message'))
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5 w-auto">
-  <!-- Then put toasts within -->
-  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
-    data-delay="5000">
-    <div class="toast-header">
-      <i class="far fa-check-circle green rounded me-2"></i>
-      <strong class="mr-auto ml-1">Finalizado</strong>
-      <small>{{ date('m-d-Y h:i:s a'); }}</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      {{ Session::get('message') }}
-    </div>
-  </div>
-</div>
-@endif
-{{-- Message Error --}}
-@if (Session::has('error'))
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5">
-  <!-- Then put toasts within -->
-  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
-    data-delay="5000">
-    <div class="toast-header bg-red ">
-      <i class="far fa-check-circle green"></i>
-      <strong class="mr-auto ml-1">Error</strong>
-      <small>{{ date('m-d-Y h:i:s a'); }}</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body bg-red-400">
-      {{ Session::get('error') }}
-    </div>
-  </div>
-</div>
-@endif
 
 <!-- Modal ADMINLTE ----------  Para platos -->
 <x-adminlte-modal id="ModalDishes" title="Agregar plato al pedido" size="lg" theme="teal" icon="fas fa-bell" v-centered
@@ -305,51 +270,84 @@
   </x-slot>
 </x-adminlte-modal>
 
-@stop
-
-
 {{-- menssages --}}
 @if (Session::has('message-order'))
-
 <div aria-live="polite" aria-atomic="true"
-  class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+  class="d-flex justify-content-end align-items-center w-100 mb-2 mb-lg-2 btn-flotante">
   <!-- Then put toasts within -->
   <div id="toast1" class="toast bg-green" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
     <div class="toast-header">
       <i class="far fa-check-circle green"></i>
       <strong class="mr-auto ml-1">Finalizado</strong>
-      <small>{{ Time() }}</small>
+      <small>{{ date('m-d-Y h:i:s a') }}</small>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body">
-      Orden generada exitosamente!.
+      {{ Session::get('message-order') }}
     </div>
   </div>
 </div>
 @endif
-@if (Session::has('error-order'))
 
+@if (Session::has('error-order'))
 <div aria-live="polite" aria-atomic="true"
-  class="d-flex justify-content-end align-items-center w-100 mb-5 mb-lg-5 btn-flotante">
+  class="d-flex justify-content-end align-items-center w-100 mb-2 mb-lg-2 btn-flotante">
   <!-- Then put toasts within -->
   <div id="toast1" class="toast bg-red" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">
     <div class="toast-header ">
       <i class="fas fa-exclamation-triangle"></i>
       {{-- <img src="{{ asset('favicon/dishx24.png') }}" class="rounded me-2" alt="icono-dish"> --}}
       <strong class="mr-auto ml-1">Error</strong>
-      <small>{{ $time }}</small>
+      <small>{{ date('m-d-Y h:i:s a') }}</small>
       <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
     <div class="toast-body">
-      No se pudo generar orden.
+      {{ Session::get('error-order') }}
     </div>
   </div>
 </div>
 @endif
 
 
-@extends('layouts.footers.footer')
+{{-- Message --}}
+@if (Session::has('message'))
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5 w-auto">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
+    data-delay="5000">
+    <div class="toast-header">
+      <i class="far fa-check-circle green rounded me-2"></i>
+      <strong class="mr-auto ml-1">Finalizado</strong>
+      <small>{{ date('m-d-Y h:i:s a'); }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      {{ Session::get('message') }}
+    </div>
+  </div>
+</div>
+@endif
+{{-- Message Error --}}
+@if (Session::has('error'))
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-center mb-5 mb-lg-5">
+  <!-- Then put toasts within -->
+  <div id="toast1" class="toast btn-flotante w-auto" role="alert" aria-live="assertive" aria-atomic="true"
+    data-delay="5000">
+    <div class="toast-header bg-red ">
+      <i class="far fa-check-circle green"></i>
+      <strong class="mr-auto ml-1">Error</strong>
+      <small>{{ date('m-d-Y h:i:s a'); }}</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body bg-red-400">
+      {{ Session::get('error') }}
+    </div>
+  </div>
+</div>
+@endif
 
+@extends('layouts.footers.footer')
+@stop
 @section('js')
 <script>
   $(document).ready(function() {
@@ -398,15 +396,6 @@
         behavior: "smooth"
       });
     });
-  });
-  $('#to-dish').on("click", function() {
-
-  });
-  $('#to-drink').on("click", function() {
-
-  });
-  $('#to-spirit').on("click", function() {
-    this.scrollIntoView(true);
   });
 </script>
 

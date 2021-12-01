@@ -17,10 +17,10 @@ class CreateOrdersTable extends Migration
             $table->bigIncrements('id');
             $table->date('date')->nullable(false);
             $table->timestamps();
-            $table->foreignId('tableID')
+            $table->foreignId('table_id')
                 ->nullable(false)
                 ->constrained('tables');
-            $table->foreignId('userID')
+            $table->foreignId('user_id')
                 ->nullable(true)
                 ->constrained('users');
         });

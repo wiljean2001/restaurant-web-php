@@ -14,14 +14,14 @@ class CreateDishOrdersTable extends Migration
     public function up()
     {
         Schema::create('dish_orders', function (Blueprint $table) {
-            $table->id();
+            $table->bigInteger('id');
             $table->integer('quantify')->nullable(false);
             $table->double('price')->nullable(false);
             $table->timestamps();
-            $table->foreignId('dishID')
+            $table->foreignId('dish_id')
                 ->nullable(false)
                 ->constrained('dishes');
-            $table->foreignId('orderID')
+            $table->foreignId('order_id')
                 ->nullable(false)
                 ->constrained('orders');
         });

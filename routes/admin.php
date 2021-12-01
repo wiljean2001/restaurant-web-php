@@ -56,8 +56,6 @@ Route::post('mesas/eliminar', [TableController::class, 'delete'])->name('table.d
 Route::post('mesas/registrar', [TableController::class, 'create'])->name('table.create');
 
 
-
-
 // roles
 Route::get('roles/mostrar', [RoleController::class, 'index'])->middleware('can:admin.roles')->name('role.show');
 Route::post('roles/actualizar', [RoleController::class, 'update'])->middleware('can:admin.roles')->name('role.update');

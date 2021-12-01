@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Drink_order extends Model
 {
     use HasFactory;
+    protected $fillable = ['id','quantify','price', 'drinks_id', 'order_id'];
 
-    public function drink()
+    public function drinks()
     {
-        return $this->belongsTo(Drink::class);
+        return $this->belongsToMany(Drink::class, Drink_order::class, 'drink_id', 'id');
     }
 
-    public function orders()
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }

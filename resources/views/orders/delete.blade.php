@@ -29,6 +29,9 @@
                     <td>{!! $row->quantify !!} uds.</td>
                     <td>Mesa {!! $row->num_table !!}</td>
                     <td>S/ {!! $row->total !!}</td>
+                    <td>
+                        <input type="checkbox" name="idDel[]" class="" value="{!! $row->id !!}">
+                    </td>
                 </tr>
                 @endforeach
                 @endif

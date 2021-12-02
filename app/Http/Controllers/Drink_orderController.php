@@ -18,14 +18,14 @@ class Drink_orderController extends Controller
         // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
 
-        if ($request->session()->get('dishOrder') != '') {
-            $d = $request->session()->get('dishOrder');
+        if ($request->session()->get('drinkOrder') != '') {
+            $d = $request->session()->get('drinkOrder');
             // printf($dis);
             $drink_Order = Drink_order::create([
                 'id' => $d,
                 'quantify' => $request->quantify,
-                'price' => $request->quantify * $request->priceDish,
-                'dish_id' => $request->id,
+                'price' => $request->quantify * $request->priceDrink,
+                'drink_id' => $request->id,
                 'order_id' => $request->idOrder,
             ]);
             if ($drink_Order->save()) {
@@ -42,8 +42,8 @@ class Drink_orderController extends Controller
                 $drink_Order = Drink_order::create([
                     'id' => $drink,
                     'quantify' => $request->quantify,
-                    'price' => $request->quantify * $request->priceDish,
-                    'dish_id' => $request->id,
+                    'price' => $request->quantify * $request->priceDrink,
+                    'drink_id' => $request->id,
                     'order_id' => $request->idOrder,
                 ]);
                 if ($drink_Order->save()) {
@@ -56,14 +56,14 @@ class Drink_orderController extends Controller
                 $drink_Order = Drink_order::create([
                     'id' => ($d->id) + 1,
                     'quantify' => $request->quantify,
-                    'price' => $request->quantify * $request->priceDish,
-                    'dish_id' => $request->id,
+                    'price' => $request->quantify * $request->priceDrink,
+                    'drink_id' => $request->id,
                     'order_id' => $request->idOrder,
                 ]);
                 if ($drink_Order->save()) {
                     return redirect()->route('menu-restaurant')
                         ->with('message', 'Bebida agregado a la orden correctamente')
-                        ->with('dishOrder', $drink_Order->id);
+                        ->with('drinkOrder', $drink_Order->id);
                 }
             }
         }

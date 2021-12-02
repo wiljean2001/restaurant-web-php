@@ -40,7 +40,7 @@ class DrinkController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $url = Storage::put('img/dishes', $request->file('image'));
+            $url = Storage::put('img/drinks', $request->file('image'));
             $drinkObj->image()->create(['url' => $url]);
         }
 

@@ -10,10 +10,10 @@
                 <i class="fas fa-lock"></i>
                 <span>{{ __('Iniciar sesión') }}</span>
             </a>
-            <a class="nav-link text-dark" href="{{ route('register-user') }}">
+            {{-- <a class="nav-link text-dark" href="{{ route('register-user') }}">
                 <i class="fas fa-user"></i>
                 <span>{{ __('Registrar') }}</span>
-            </a>
+            </a> --}}
         </nav>
         <div class="container">
             <div class="pt-5 mb-lg-4 py-lg-5">
@@ -115,14 +115,15 @@
     {{-- Listar Platos / cards de platos --}}
     <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
         <h1 class=" my-4" id="scrollspyHeading1">Menu de platos</h1>
-        <div class="d-flex flex-wrap flex-row justify-content-lg-between justify-content-center">
+        <div class="d-flex flex-wrap flex-row justify-content-lg-around justify-content-center">
             @foreach ($dishes as $dish)
                 <div class="card text-center" style="width: 22rem; margin-bottom: 20px;">
                     @if ($dish->image)
                         <img class="card-img-top" src="{{ asset('storage/' . $dish->image->url) }}"
                             alt="Plato a pedir">
                     @else
-                        <img class="card-img-top h-50" src="{{ asset('img/dishes.png') }}" alt="Plato a pedir">
+                        {{-- <img class="card-img-top h-50" src="{{ asset('img/dishes.png') }}" alt="Plato a pedir"> --}}
+                        <img class="card-img-top h-50" src="{{ asset($dish->image->url) }}" alt="Plato a pedir">
                     @endif
                     <div class="card-body">
                         <h2 class="card-title h4">{{ $dish->name }}</h2>
@@ -203,7 +204,6 @@
                     </div>
                 </div>
             @endforeach
-
         </div>
     </div>
     {{-- paginacion --}}
@@ -355,9 +355,8 @@
             </div>
         </div>
     @endif
-
-    @extends('layouts.footers.footer')
 @stop
+@extends('layouts.footers.footer')
 @section('js')
     <script>
         $(document).ready(function() {

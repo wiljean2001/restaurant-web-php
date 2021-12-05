@@ -48,7 +48,7 @@
 </div>
 
 <div class="mt-4 mt-lg-4">
-  <a href="{{ route('register') }}" class="btn btn-xs btn-default text-primary mx-1 shadow text-right" title="Edit">
+  <a href="{{ route('register-user') }}" class="btn btn-xs btn-default text-primary mx-1 shadow text-right" title="Edit">
     <i class="fas fa-user-plus"></i>
     {{ __('Registrar Usuario') }}
   </a>

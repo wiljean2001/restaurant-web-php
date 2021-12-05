@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\DrinkController;
 use App\Http\Controllers\OrderController;
@@ -14,11 +15,8 @@ Route::get('', function () {
     return view('admin');
 })->name('admin.auth');
 
-Route::get('registrar-usuario', [RegisteredUserController::class, 'create'])
-    ->middleware(['guest:' . config('fortify.guard'), 'can:admin.roles'])
-    ->name('register-user');
 // Route::get('pestañas', function () {
-//     return view('adminIFrame');
+    //     return view('adminIFrame');
 // });
 
 Route::get('menu', [OrderController::class, 'index'])->name('order.index');
@@ -61,6 +59,10 @@ Route::post('mesas/registrar', [TableController::class, 'create'])->name('table.
 // roles
 Route::get('roles/mostrar', [RoleController::class, 'index'])->middleware('can:admin.roles')->name('role.show');
 Route::post('roles/actualizar', [RoleController::class, 'update'])->middleware('can:admin.roles')->name('role.update');
+// Registrar usuarios
+Route::get('registrar-usuario', [UserController::class, 'create'])
+    ->middleware('can:admin.roles')
+    ->name('register-user');
 // ignorar
 // Route::get('prueba/perfil', function(){
 //     return view('profile');    

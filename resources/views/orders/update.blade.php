@@ -5,7 +5,7 @@
 @section('content')
     <div class="container">
         <div class="d-flex justify-content-lg-between align-items-lg-center">
-            <h1 class="my-lg-2 my-2">ORDEN: </h1>
+            <h1 class="my-lg-2 my-2">ACTUALIZAR ORDEN: </h1>
             <a href="{{ route('menu-restaurant') }}"><i class="fas fa-chevron-circle-left fa-3x"></i></a>
         </div>
         <div class="mx-5 mx-lg-5">

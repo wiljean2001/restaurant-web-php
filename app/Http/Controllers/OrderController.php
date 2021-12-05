@@ -27,10 +27,10 @@ class OrderController extends Controller
                 ->update([
                     'state' => false
                 ]);
-            // Order::where('id', $request->session()->get('orderId'))
-            //     ->update([
-            //         'finalized' => true
-            //     ]);
+            Order::where('id', $request->session()->get('orderId'))
+                ->update([
+                    'finalized' => true
+                ]);
             // alerta al mesero que se finalizo una orden.
             $request->session()->forget('orderId');
             $request->session()->forget('tableID');

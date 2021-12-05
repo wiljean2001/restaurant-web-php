@@ -82,22 +82,23 @@ class OrderController extends Controller
         back()->with('tableID', $request->session()->get('tableID'));
 
         // Eloquent: Relationships 
-        // $dishes_o = Order::with('dish_Orders.dishes')
-        //     ->where('table_id', $request->session()->get('tableID'))
-        //     ->where('id', $request->session()->get('orderId'))->get();
+        $dishes_o = Order::with('dish_Orders.dishes')
+            ->where('table_id', $request->session()->get('tableID'))
+            ->where('id', $request->session()->get('orderId'))->get();
 
-        // // print_r($dishes->dish_orders->dishes);
+        // print_r($dishes->dish_orders->dishes);
 
-        // $drinks_o = Order::with('drink_Orders.drinks')
-        //     ->where('table_id', $request->session()->get('tableID'))
-        //     ->where('id', $request->session()->get('orderId'))->get();
+        $drinks_o = Order::with('drink_Orders.drinks')
+            ->where('table_id', $request->session()->get('tableID'))
+            ->where('id', $request->session()->get('orderId'))->get();
 
-        // $spirits_o = Order::with('spirit_Orders.spirits')
-        //     ->where('table_id', $request->session()->get('tableID'))
-        //     ->where('id', $request->session()->get('orderId'))->get();
+        $spirits_o = Order::with('spirit_Orders.spirits')
+            ->where('table_id', $request->session()->get('tableID'))
+            ->where('id', $request->session()->get('orderId'))->get();
 
-        // $table = Table::where('id', $request->session()->get('tableID'))->get();
-
+        $table = Table::where('id', $request->session()->get('tableID'))->get();
+        printf($dishes_o);
+        dd($dishes_o);
 
         // printf($dishes);
         // foreach ($dishes as $dish) {
@@ -109,52 +110,52 @@ class OrderController extends Controller
         // printf($dishes_o);
 
         //  METODO DE JOINS
-        $dishes = Dish::select(
-            'dishes.id',
-            'dishes.name',
-            'dishes.price',
-            'dishes.description',
-            'dish_orders.quantify',
-            'tables.num_table',
-            'dish_orders.price as total'
-        )
-            ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dish_id')
-            ->join('orders', 'dish_orders.order_id', '=', 'orders.id')
-            ->join('tables', 'orders.table_id', '=', 'tables.id')
-            ->where('tables.id', '=', $request->session()->get('tableID'))
-            ->where('orders.id', '=', $request->session()->get('orderId'))
-            ->get();;
+        // $dishes = Dish::select(
+        //     'dishes.id',
+        //     'dishes.name',
+        //     'dishes.price',
+        //     'dishes.description',
+        //     'dish_orders.quantify',
+        //     'tables.num_table',
+        //     'dish_orders.price as total'
+        // )
+        //     ->join('dish_orders', 'dishes.id', '=', 'dish_orders.dish_id')
+        //     ->join('orders', 'dish_orders.order_id', '=', 'orders.id')
+        //     ->join('tables', 'orders.table_id', '=', 'tables.id')
+        //     ->where('tables.id', '=', $request->session()->get('tableID'))
+        //     ->where('orders.id', '=', $request->session()->get('orderId'))
+        //     ->get();;
 
-        $drinks = Drink::select(
-            'drinks.id',
-            'drinks.name',
-            'drinks.price',
-            'drinks.description',
-            'drink_orders.quantify',
-            'tables.num_table',
-            'drink_orders.price as total'
-        )
-            ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drink_id')
-            ->join('orders', 'drink_orders.order_id', '=', 'orders.id')
-            ->join('tables', 'orders.table_id', '=', 'tables.id')
-            ->where('tables.id', '=', $request->session()->get('tableID'))
-            ->where('orders.id', '=', $request->session()->get('orderId'))
-            ->get();;
-        $spirits = Spirit::select(
-            'spirits.id',
-            'spirits.name',
-            'spirits.price',
-            'spirits.description',
-            'spirit_orders.quantify',
-            'tables.num_table',
-            'spirit_orders.price as total'
-        )
-            ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spirit_id')
-            ->join('orders', 'spirit_orders.order_id', '=', 'orders.id')
-            ->join('tables', 'orders.table_id', '=', 'tables.id')
-            ->where('tables.id', '=', $request->session()->get('tableID'))
-            ->where('orders.id', '=', $request->session()->get('orderId'))
-            ->get();
+        // $drinks = Drink::select(
+        //     'drinks.id',
+        //     'drinks.name',
+        //     'drinks.price',
+        //     'drinks.description',
+        //     'drink_orders.quantify',
+        //     'tables.num_table',
+        //     'drink_orders.price as total'
+        // )
+        //     ->join('drink_orders', 'drinks.id', '=', 'drink_orders.drink_id')
+        //     ->join('orders', 'drink_orders.order_id', '=', 'orders.id')
+        //     ->join('tables', 'orders.table_id', '=', 'tables.id')
+        //     ->where('tables.id', '=', $request->session()->get('tableID'))
+        //     ->where('orders.id', '=', $request->session()->get('orderId'))
+        //     ->get();;
+        // $spirits = Spirit::select(
+        //     'spirits.id',
+        //     'spirits.name',
+        //     'spirits.price',
+        //     'spirits.description',
+        //     'spirit_orders.quantify',
+        //     'tables.num_table',
+        //     'spirit_orders.price as total'
+        // )
+        //     ->join('spirit_orders', 'spirits.id', '=', 'spirit_orders.spirit_id')
+        //     ->join('orders', 'spirit_orders.order_id', '=', 'orders.id')
+        //     ->join('tables', 'orders.table_id', '=', 'tables.id')
+        //     ->where('tables.id', '=', $request->session()->get('tableID'))
+        //     ->where('orders.id', '=', $request->session()->get('orderId'))
+        //     ->get();
 
 
         return view('orders.show', compact('dishes', 'drinks', 'spirits', 'heads', 'config'));

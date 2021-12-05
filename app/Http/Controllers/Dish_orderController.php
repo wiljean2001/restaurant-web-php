@@ -19,7 +19,7 @@ class Dish_orderController extends Controller
         // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
 
-        if ($request->session()->get('dishOrder') != '') {
+        if ($request->session()->has('dishOrder')) {
             $d = $request->session()->get('dishOrder');
             // printf($dis);
             $dish_Order = Dish_order::create([
@@ -53,20 +53,20 @@ class Dish_orderController extends Controller
                         ->with('dishOrder', $dish_Order->id);
                 }
             }
-            foreach ($dish as $d) {
-                $dish_Order = Dish_order::create([
-                    'id' => ($d->id) + 1,
-                    'quantify' => $request->quantify,
-                    'price' => $request->quantify * $request->priceDish,
-                    'dish_id' => $request->id,
-                    'order_id' => $request->idOrder,
-                ]);
-                if ($dish_Order->save()) {
-                    return redirect()->route('menu-restaurant')
-                        ->with('message', 'Plato agregado a la orden correctamente')
-                        ->with('dishOrder', $dish_Order->id);
-                }
+            // foreach ($dish as $d) {
+            $dish_Order = Dish_order::create([
+                'id' => ($dish) + 1,
+                'quantify' => $request->quantify,
+                'price' => $request->quantify * $request->priceDish,
+                'dish_id' => $request->id,
+                'order_id' => $request->idOrder,
+            ]);
+            if ($dish_Order->save()) {
+                return redirect()->route('menu-restaurant')
+                    ->with('message', 'Plato agregado a la orden correctamente')
+                    ->with('dishOrder', $dish_Order->id);
             }
+            // }
         }
     }
 }

@@ -14,7 +14,7 @@ class CreateSpiritOrdersTable extends Migration
     public function up()
     {
         Schema::create('spirit_orders', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->bigIncrements('id');
             $table->integer('quantify')->nullable(false);
             $table->double('price')->nullable(false);
             $table->timestamps();

@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Spirit_order extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','quantify','price', 'spirit_id', 'order_id'];
+    protected $fillable = ['id', 'quantify', 'price', 'spirit_id', 'order_id'];
 
     public function spirits()
     {
-        return $this->belongsToMany(Spirit::class, Spirit_order::class, 'spirit_id', 'id');
+        return $this->belongsTo(Spirit::class, 'spirit_id');
     }
 
     public function order()

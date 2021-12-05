@@ -19,6 +19,9 @@ class Dish_order extends Model
     // belongsToMany -> relacionar la tabla dishes con orders 
     // hasManyThrough
     // hasMany
+    // return $this->belongsTo(Dish::class);
+    // return $this->hasManyThrough(Dish::class, Dish_order::class, 'dish_id', 'id');
+    // return $this->belongsToMany(Dish::class, Dish_order::class, 'dish_id', 'id');
     // return $this->hasManyThrough(Dish::class, Dish_order::class, 'dish_id', 'id');
     // return $this->belongsToMany(Dish::class, Dish_order::class, 'dish_id', 'id');
     // return $this->hasManyThrough(Dish::class, Dish_order::class, 'dish_id', 'id');

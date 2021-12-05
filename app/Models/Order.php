@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['id', 'date', 'table_id', 'user_id'];
     public function dish_Orders()
     {
         // Relacion de uno a muchos entre Order y Dish_order
@@ -28,7 +28,7 @@ class Order extends Model
     public function tables()
     {
         // Relacion de uno a muchos entre Order y Table
-        return $this->belongsTo(Table::class);
+        return $this->belongsTo(Table::class, 'table_id');
     }
 
     //      Resultados

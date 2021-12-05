@@ -14,7 +14,9 @@ Route::get('', function () {
     return view('admin');
 })->name('admin.auth');
 
-
+Route::get('registrar-usuario', [RegisteredUserController::class, 'create'])
+    ->middleware(['guest:' . config('fortify.guard'), 'can:admin.roles'])
+    ->name('register-user');
 // Route::get('pestañas', function () {
 //     return view('adminIFrame');
 // });

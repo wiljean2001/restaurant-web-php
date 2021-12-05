@@ -18,54 +18,16 @@ class Spirit_orderController extends Controller
         // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
 
-        if ($request->session()->get('spiritOrder') != '') {
-            $d = $request->session()->get('spiritOrder');
-            // printf($dis);
-            $spirit_Order = Spirit_order::create([
-                'id' => $d,
-                'quantify' => $request->quantify,
-                'price' => $request->quantify * $request->priceSpirit,
-                'spirit_id' => $request->id,
-                'order_id' => $request->idOrder,
-            ]);
-            if ($spirit_Order->save()) {
-                // dd($dish_Order);
-                return redirect()->route('menu-restaurant')
-                    ->with('message', 'Bebida agregado a la orden correctamente')
-                    ->with('spiritOrder', $spirit_Order->id);
-            }
-        } else {
-            $spirit = Spirit_order::select('id')->max('id');
-            // dd($dish);
-            if (!$spirit) {
-                $spirit = 1;
-                $spirit_Order = Spirit_order::create([
-                    'id' => $spirit,
-                    'quantify' => $request->quantify,
-                    'price' => $request->quantify * $request->priceSpirit,
-                    'spirit_id' => $request->id,
-                    'order_id' => $request->idOrder,
-                ]);
-                if ($spirit_Order->save()) {
-                    return redirect()->route('menu-restaurant')
-                        ->with('message', 'Bebida agregado a la orden correctamente')
-                        ->with('spiritOrder', $spirit_Order->id);
-                }
-            }
-            foreach ($spirit as $d) {
-                $spirit_Order = Spirit_order::create([
-                    'id' => ($d->id) + 1,
-                    'quantify' => $request->quantify,
-                    'price' => $request->quantify * $request->priceSpirit,
-                    'spirit_id' => $request->id,
-                    'order_id' => $request->idOrder,
-                ]);
-                if ($spirit_Order->save()) {
-                    return redirect()->route('menu-restaurant')
-                        ->with('message', 'Bebida agregado a la orden correctamente')
-                        ->with('spiritOrder', $spirit_Order->id);
-                }
-            }
+        $spirit_Order = Spirit_order::create([
+            'quantify' => $request->quantify,
+            'price' => $request->quantify * $request->priceSpirit,
+            'spirit_id' => $request->id,
+            'order_id' => $request->idOrder,
+        ]);
+        if ($spirit_Order->save()) {
+            return redirect()->route('menu-restaurant')
+                ->with('message', 'Bebida agregado a la orden correctamente')
+                ->with('spiritOrder', $spirit_Order->id);
         }
     }
 }

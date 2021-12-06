@@ -15,7 +15,6 @@ class Drink_orderController extends Controller
                 ->with('error', 'Error, por favor genere una orden');
         }
         back()->with('tableID', $request->session()->get('tableID'));
-        // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
 
         $drink_Order = Drink_order::create([

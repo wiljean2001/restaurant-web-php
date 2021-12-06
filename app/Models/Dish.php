@@ -11,7 +11,7 @@ class Dish extends Model
     protected $fillable = ['id', 'name', 'description', 'price', 'stock'];
     public function dish_Orders()
     {
-        return $this->hasMany(Dish_order::class,);
+        return $this->hasMany(Dish_order::class);
     }
     public function image()
     {

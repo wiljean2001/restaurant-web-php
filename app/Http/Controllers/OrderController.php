@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Dish;
 use App\Models\Drink;
 use App\Models\Order;
@@ -9,7 +10,9 @@ use App\Models\Spirit;
 use App\Models\Table;
 use App\Models\Dish_order;
 use App\Models\Drink_order;
+use App\Models\Mozo;
 use App\Models\Spirit_order;
+use App\Models\Waiter;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -20,6 +23,7 @@ class OrderController extends Controller
         $dishes = Dish::paginate(6);
         $drinks = Drink::paginate(6);
         $spirits = Spirit::paginate(6);
+        $waiters = Waiter::all();
         // Name end-order -> finaliza la orden
         if ($request->endOrder) {
             // Vuelve a la tabla al estado disponible
@@ -40,32 +44,50 @@ class OrderController extends Controller
 
         back()->with('orderId', $request->session()->get('orderId'));
         back()->with('tableID', $request->session()->get('tableID'));
-        return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables'));
+        return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables', 'waiters'));
     }
 
+    // Metodo para generar
     public function create(Request $request)
     {
         // return redirect()->route('menu-restaurant');
+        back()->with('error-order', 'Datos obligatorios: Mesero, nombre del cliente y seleccionar una mesa.');
         $request->validate([
             'idTable' => 'required',
+            'name_client' => 'required',
+            'waiter_id' => 'required',
         ]);
-        Table::where('id', $request->idTable)
-            ->update([
-                'state' => true
-            ]);
         // $table->state = true;
-        $orders = new Order();
-        $orders->date = date('Y-m-d h:i:s');
-        $orders->table_id = $request->idTable;
+        // Table::where('id', $request->idTable)
+        //     ->update([
+        //         'state' => true
+        //     ]);
+        // Generar orden
+        $clients = Client::create([
+            'dni' => $request->dni_client,
+            'ruc' => $request->ruc_client,
+            'name' => $request->name_client,
+        ]);
+        $orders = Order::create([
+            'date'        => date('Y-m-d h:i:s'),
+            'table_id'  => $request->idTable,
+            'client_id' => $clients->id,
+            'waiter_id' => $request->waiter_id
+        ]);
 
-        if ($orders->save()) {
+        $orders->tables->state = true;
+
+        if ($orders->save() && $clients->save()) {
             back()->with('message-order', 'Orden generada exitosamente!.');
+            $request->session()->forget('error-order');
         } else {
             back()->with('error-order', 'No se pudo generar orden.');
         }
         return redirect()->route('menu-restaurant')
             ->with('orderId', '' . $orders->id)
-            ->with('tableID', $request->idTable);
+            ->with('tableID', $request->idTable)
+            ->with('client_id', $clients->id)
+            ->with('waiter_id', $request->waiter_id);
     }
     // , $idTable
     public function show(Request $request)

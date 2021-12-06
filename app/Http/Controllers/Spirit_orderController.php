@@ -15,7 +15,6 @@ class Spirit_orderController extends Controller
                 ->with('error', 'Error, por favor genere una orden');
         }
         back()->with('tableID', $request->session()->get('tableID'));
-        // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
 
         $spirit_Order = Spirit_order::create([

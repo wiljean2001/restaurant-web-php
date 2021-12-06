@@ -21,3 +21,5 @@ Route::get('orden/eliminar', [OrderController::class, 'delete'])->name('order.de
 Route::post('pedido/registrar/plato', [Dish_orderController::class, 'create'])->name('dish.orders.store');
 Route::post('pedido/registrar/bebida', [Drink_orderController::class, 'create'])->name('drink.orders.store');
 Route::post('pedido/registrar/licor', [Spirit_orderController::class, 'create'])->name('spirit.orders.store');
+
+Route::post('realizar-pedido', [OrderController::class, 'create'])->name('register.client');

@@ -21,9 +21,12 @@ class CreateOrdersTable extends Migration
             $table->foreignId('table_id')
                 ->nullable(false)
                 ->constrained('tables');
-            $table->foreignId('user_id')
-                ->nullable(true)
-                ->constrained('users');
+            $table->foreignId('client_id')
+                ->nullable(false)
+                ->constrained('clients');
+            $table->foreignId('waiter_id')
+                ->nullable(false)
+                ->constrained('waiters');
         });
     }
 

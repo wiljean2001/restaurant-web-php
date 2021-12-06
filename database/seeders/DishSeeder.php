@@ -16,28 +16,19 @@ class DishSeeder extends Seeder
     {
         // Dish::factory(50)->create();
         Dish::create([
-            'name ' => 'Arroz con pato',
+            'name' => 'Arroz con pollo',
             'price' => '30.00',
-            'description' => 'Plato personal ...',
+            'description' => 'El Arroz con Pollo es un clásico de la cocina peruana '
+                . 'de delicioso sabor gracias a culantro y con un aroma '
+                . 'inconfundible capaz de despertar el apetito de muchos.',
             'stock' => '10'
         ]);
         Dish::create([
-            'name ' => 'Arroz con pollo',
-            'price' => '30.00',
-            'description' => 'Plato personal ...',
-            'stock' => '10'
-        ]);
-        Dish::create([
-            'name ' => 'Seco de cabrito',
-            'price' => '30.00',
-            'description' => 'Plato personal ...',
-            'stock' => '10'
-        ]);
-        Dish::create([
-            'name ' => 'Ceviche',
-            'price' => '30.00',
-            'description' => 'Plato personal ...',
-            'stock' => '10'
+            'name' => 'Causa rellena de pollo',
+            'price' => '35.00',
+            'description' => 'Uno de los platos más tradicionales de la cocina peruana. '
+                . 'Cuenta la historia que este plato ya se consumía en la época precolombina',
+            'stock' => '50'
         ]);
         // 
         //         (`id`,

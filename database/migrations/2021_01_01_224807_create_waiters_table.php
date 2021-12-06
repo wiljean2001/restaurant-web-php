@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablesTable extends Migration
+class CreateWaitersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('waiters', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // campo unico
-            $table->string('num_table', 5)->nullable(false)->unique(true);
-            $table->integer('capacity')->nullable(false)->default(1);
-            $table->boolean('state')->nullable(false)->default(false);
+            $table->string('dni', 8)->nullable(false);
+            $table->string('name', 40)->nullable(false);
+            $table->string('lname', 50)->nullable(false);
+            $table->date('date_of_birth')->nullable(false);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('waiters');
     }
 }

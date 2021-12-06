@@ -16,7 +16,6 @@ class Dish_orderController extends Controller
                 ->with('error', 'Error, por favor genere una orden');
         }
         back()->with('tableID', $request->session()->get('tableID'));
-        // back()->with('dishOrder', $request->session()->get('dishOrder'));
         back()->with('orderId', $request->session()->get('orderId'));
         $dish_Order = Dish_order::create([
             'quantify' => $request->quantify,

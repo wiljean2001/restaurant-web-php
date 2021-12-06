@@ -15,14 +15,36 @@ class ImageSeeder extends Seeder
     public function run()
     {
         Image::create([
-            'url' => '\img\dish\arroz_con_pato.png',
+            'url' => '\img\dishes\arroz_con_pollo.jpeg',
             'imageable_id' => '1',
-            'imageable_type' => 'App\Model\Dish'
+            'imageable_type' => 'App\Models\Dish'
         ]);
         Image::create([
-            'url' => '\dish\arroz_con_pollo.png',
+            'url' => '\img\dishes\causa_rellena_limena.webp',
             'imageable_id' => '2',
-            'imageable_type' => 'App\Model\Dish'
+            'imageable_type' => 'App\Models\Dish'
+        ]);
+
+        Image::create([
+            'url' => '\img\drinks\gatorade_botella_500ML.jpg',
+            'imageable_id' => '1',
+            'imageable_type' => 'App\Models\Drink'
+        ]);
+        Image::create([
+            'url' => '\img\drinks\sprite_lata_335ML.jpg',
+            'imageable_id' => '2',
+            'imageable_type' => 'App\Models\Drink'
+        ]);
+
+        Image::create([
+            'url' => '\img\spirits\vino_tinto_reserva_750ML.jpg',
+            'imageable_id' => '1',
+            'imageable_type' => 'App\Models\Spirit'
+        ]);
+        Image::create([
+            'url' => '\img\spirits\pisco_quebranta750ML.jpg',
+            'imageable_id' => '2',
+            'imageable_type' => 'App\Models\Spirit'
         ]);
     }
 }

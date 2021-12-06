@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTablesTable extends Migration
+class CreateClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateTablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('clients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            // campo unico
-            $table->string('num_table', 5)->nullable(false)->unique(true);
-            $table->integer('capacity')->nullable(false)->default(1);
-            $table->boolean('state')->nullable(false)->default(false);
+            $table->string('dni')->nullable(true)->default('999999999');
+            $table->string('ruc')->nullable(true)->default('999999999999999');
+            $table->string('name')->nullable(true)->default('Cliente general');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateTablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('clients');
     }
 }

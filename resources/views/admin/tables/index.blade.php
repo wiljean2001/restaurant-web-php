@@ -47,8 +47,8 @@
                             <td>{!! $row->capacity !!}</td>
                             <td>
                                 <div>
-                                    <input type="text" value="{!! $row->state !!}" id="state_table" hidden>
-                                    <input type="text" value="{!! $row->capacity !!}" id="capacity_table" hidden>
+                                    <input type="text" value="{!! $row->state !!}" class="state_table" hidden>
+                                    <input type="text" value="{!! $row->capacity !!}" class="capacity_table" hidden>
                                     <x-adminlte-button id="{!! $row->id !!}" name="{!! $row->num_table !!}"
                                         icon="fas fa-pen-square" label="Editar" data-toggle="modal"
                                         class="btn btn-primary modalTableEdit w-auto m-1 m-lg-1" theme="warning" />
@@ -166,13 +166,18 @@
 @push('js')
     <script>
         $('.modalTableEdit').click(function() {
+            var table = $('#table3').DataTable();
             var id = this.id;
             var name = this.name;
+            var state = null;
+            var row = $(this).parent().parent()[0];
+            var data = table.row(row).data();
             // table id
             document.querySelector('#idTable').value = id;
             document.querySelector('#numtable').value = name;
-            var state = document.querySelector('#state_table').value;
-            var capacity = document.querySelector('#capacity_table').value;
+            state = document.querySelector('.state_table').value;
+            var capacity = document.querySelector('.capacity_table').value;
+            console.log([state, capacity, data[2]]);
             if (state == 1) {
                 document.querySelector('#stateTable').checked = true;
             } else {

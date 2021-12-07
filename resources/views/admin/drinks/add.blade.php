@@ -93,9 +93,9 @@
     </div>
 </div>
 @endif
-
-@stop
 @extends('layouts.footers.footer')
+@stop
+
 
 @section('js')
 <script>

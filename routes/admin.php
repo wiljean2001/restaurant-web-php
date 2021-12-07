@@ -55,14 +55,18 @@ Route::post('mesas/actualizar', [TableController::class, 'update'])->name('table
 Route::post('mesas/eliminar', [TableController::class, 'delete'])->name('table.delete');
 Route::post('mesas/registrar', [TableController::class, 'create'])->name('table.create');
 
-
 // roles
 Route::get('roles/mostrar', [RoleController::class, 'index'])->middleware('can:admin.roles')->name('role.show');
 Route::post('roles/actualizar', [RoleController::class, 'update'])->middleware('can:admin.roles')->name('role.update');
+
+// Orders
+Route::get('pedidos/nuevos', [OrderController::class, 'ordersNew'])->name('orders.new');
+Route::get('pedidos/nuevos/{order_id}', [OrderController::class, 'ordersNew'])->name('orders.new.now');
+
 // Registrar usuarios
 Route::get('registrar-usuario', [UserController::class, 'create'])
-    ->middleware('can:admin.roles')
-    ->name('register-user');
+->middleware('can:admin.roles')
+->name('register-user');
 // ignorar
 // Route::get('prueba/perfil', function(){
 //     return view('profile');    

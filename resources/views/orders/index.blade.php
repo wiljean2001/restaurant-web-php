@@ -45,9 +45,9 @@
                 id="tooltip">
                 <i class="fas fa-eye"></i></a>
             <a href="{{ route('order.edit') }}" title="editar orden">
-                <i class="fas fa-minus-square"></i></a>
-            <a href="{{ route('order.delete') }}" title="eliminar orden">
                 <i class="fas fa-edit"></i></a>
+            <a href="{{ route('order.delete') }}" title="eliminar orden">
+                <i class="fas fa-minus-square"></i></a>
         </div>
         <div class="btn-mas">
             <label for="btn-mas" class="fa fa-plus"></label>
@@ -139,13 +139,7 @@
                             @endif
                         @endforeach
                     </x-adminlte-select>
-                    <x-adminlte-input name="isOrder" igroup-size="sm" disabled class="bg-white" id="ifOrder">
-                        <x-slot name="prependSlot">
-                            <div class="input-group-text">
-                                {{ __('Orden:') }}
-                            </div>
-                        </x-slot>
-                    </x-adminlte-input>
+                    <input type="text" class="form-control bg-white" id="idOrder" name="isOrder" disabled>
                 </li>
                 <li class="nav-item">
                     <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
@@ -156,7 +150,7 @@
     </div>
 
     {{-- Listar Platos / cards de platos --}}
-    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
+    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center h-auto">
         <h1 class=" my-4" id="platos">Menu de platos</h1>
         <div class="d-flex flex-wrap flex-row justify-content-lg-around justify-content-center">
             @foreach ($dishes as $dish)
@@ -253,7 +247,39 @@
     </div>
     {{-- paginacion --}}
     <div class="pagination justify-content-center m-lg-3 m-3">
-        {{ $spirits->links() }}
+        {{ $dishes->links() }}
+    </div>
+    <div class="container w-50">
+        <div id="carouselExampleIndicators" class="carousel slide text-dark" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
+                    class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{{  asset('img/spirits.png')  }}" class="d-block w-100" alt="...">
+                </div>
+                @foreach ($recomend->slice(0, 2) as $rec)
+                    <div class="carousel-item">
+                        <img src="{{ asset('storage' . $rec->url) }}" class="d-block w-100" alt="...">
+                    </div>
+                @endforeach
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
     </div>
     {{-- Modal de bootstraps --}}
     <div class="modal fade" id="ModalDishes" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
@@ -264,8 +290,8 @@
                     <h5 class="modal-title" id="exampleModalToggleLabel">Agregar plato al pedido</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('dish.orders.store') }}" method="POST" class="text-center">
-                    <div class="modal-body">
+                <div class="modal-body">
+                    <form action="{{ route('dish.orders.store') }}" method="POST" class="text-center">
                         <div>
                             @csrf
                             <input type="text" name="id" id="idDi" hidden>
@@ -276,12 +302,12 @@
                                     placeholder="Cantidad a solicitar; Ejem.: 4" required name="quantify">
                                 <label for="floatingInput">Cantidad</label>
                             </div>
+                            <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
                         </div>
-                    </div>
-                    <div class="modal-footer text-right">
-                        <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer text-right">
+                </div>
             </div>
         </div>
     </div>
@@ -430,37 +456,39 @@
             $('.modalDish').click(function() {
                 var id = this.id;
                 var name = this.name;
-                // dish id
-                document.querySelector('#idDi').values = id;
-                document.querySelector('#priceDish').values = name;
+                document.querySelector('#idDi').value = id;
+                var b = document.querySelector('#priceDish').value = name;
                 @if (Session::has('orderId'))
-                    document.querySelector('#idDiOrder').values = {{ Session::get('orderId') }};
+                    var a = document.querySelector('#idDiOrder').value = {{ Session::get('orderId') }};
                 @endif
-                // console.log();
-                // jQuery.noConflict(); 
                 $('#ModalDishes').modal('show');
             });
             $('.modalDrink').click(function() {
                 var id = this.id;
                 var name = this.name;
                 // dish id
-                document.querySelector('#idDr').values = id;
-                document.querySelector('#priceDrink').values = name;
+                document.querySelector('#idDr').value = id;
+                document.querySelector('#priceDrink').value = name;
                 @if (Session::has('orderId'))
-                    document.querySelector('#idDrOrder').values = {{ Session::get('orderId') }};
+                    document.querySelector('#idDrOrder').value = {{ Session::get('orderId') }};
                 @endif
                 $('#ModalDrinks').modal('show');
             });
             $('.modalSpirit').click(function() {
                 var id = this.id;
                 var name = this.name;
-                document.querySelector('#idSp').values = id;
-                document.querySelector('#priceSpirit').values = name;
+                document.querySelector('#idSp').value = id;
+                document.querySelector('#priceSpirit').value = name;
                 @if (Session::has('orderId'))
-                    document.querySelector('#idSpOrder').values = {{ Session::get('orderId') }};
+                    document.querySelector('#idSpOrder').value = {{ Session::get('orderId') }};
                 @endif
                 $('#ModalSpirits').modal('show');
             });
+
+            @if (Session::has('orderId'))
+                document.querySelector('#idOrder').value = 'Generado';
+                // document.querySelector('#idOrder').id = {{ Session::get('orderId') }};
+            @endif
         });
     </script>
     <script>
@@ -474,26 +502,6 @@
                     behavior: "smooth"
                 });
             });
-        });
-    </script>
-
-    <script>
-        $(document).ready(function() {
-            var idOrder = {{ Session::get('orderId') }};
-            document.querySelector('#idSp').values = id;
-            $("#idOrder").val(idOrder);
-            if (idOrder) {
-                $("#isOrder").val('Generado');
-            }
-            var idClient = {{ Session::get('client_id') }};
-            $("#client_id").val(idOrder);
-            if (idClient) {
-                $("#client_now").val('Listo');
-            }
-            $('.toast').toast('show');
-            var element = document.getElementById('#tooltip');
-            var tooltip = new bootstrap.Tooltip(element, []);
-            tooltip.show();
         });
     </script>
 @stop

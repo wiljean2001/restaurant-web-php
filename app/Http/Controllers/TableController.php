@@ -18,9 +18,16 @@ class TableController extends Controller
 
     public function create(Request $request)
     {
-        $table = new Table();
-        $table->num_table = $request->num_table;
-        $table->state = false;
+        $request->validate([
+            'num_table' => 'required',
+            'state'          => 'required',
+            'capacity'    => 'required',
+        ]);
+        $table = Table::create([
+            'num_table' => $request->num_table,
+            'state'           => false,
+            'capacity'     => $request->capacity,
+        ]);
         if ($table->save()) {
             back()->with('message', 'Registro realizada exitosamente!.');
         } else {
@@ -32,8 +39,16 @@ class TableController extends Controller
     public function update(Request $request)
     {
         try {
+            $state = 0;
+            if ($request->state)
+                $state = $request->state;
+
             Table::where('id', '=', $request->id)
-                ->update(['num_table' => $request->nameTable]);
+                ->update([
+                    // 'num_table' => $request->nameTable,
+                    'capacity' => $request->capacity,
+                    'state' => $state,
+                ]);
             back()->with('message', 'Actualizacion realizada exitosamente!.');
         } catch (Exception $exec) {
             back()->with('error', 'El nombre de la mesa ya existe, inserte un nuevo nombre.');
@@ -57,7 +72,9 @@ class TableController extends Controller
         return $heads = [
             ['label' => 'id', 'width' => 0],
             ['label' => 'Nombre de tabla', 'width' => 05],
-            ['label' => 'Accion', 'no-export' => true, 'width' => 3]
+            ['label' => 'Estado', 'width' => 05],
+            ['label' => 'Capacidad', 'width' => 05],
+            ['label' => 'Accion', 'no-export' => true, 'width' => 'auto']
 
         ];
     }
@@ -82,6 +99,8 @@ class TableController extends Controller
                 ],
             ],
             'columns' => [
+                null,
+                null,
                 null,
                 null,
                 ['orderable' => false]

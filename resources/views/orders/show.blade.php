@@ -12,10 +12,6 @@
             <x-adminlte-card title="PLASTOS" theme="maroon" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($dishes_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Dish Table --}}
                     <x-adminlte-datatable id="table1" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -51,10 +47,6 @@
             <x-adminlte-card title="BEBIDAS" theme="success" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($drinks_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Drink Table --}}
                     <x-adminlte-datatable id="table2" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -90,10 +82,6 @@
             <x-adminlte-card title="LICORES" theme="purple" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($spirits_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Spirit Table --}}
                     <x-adminlte-datatable id="table3" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -124,6 +112,24 @@
                     </x-adminlte-datatable>
                 @endforeach
             </x-adminlte-card>
+        </div>
+        <div class="mx-5 mx-lg-5 mb-5 mb-lg-5 d-flex justify-content-lg-around">
+            <div>
+                <label for="">Total a pagar: S/</label>
+                <input type="text" value="{{ $total }}" disabled>
+            </div>
+            <div>
+                <label for="">Mozo: </label>
+                <input type="text" value="{{ $mozo[0]->name }}" disabled>
+            </div>
+            <div>
+                <label for="">Mesa: </label>
+                <input type="text" value="{{ $table[0]->num_table }}" disabled>
+            </div>
+            <div>
+                <label for="">Fecha: </label>
+                <input type="text" value="{!! $dishes_o[0]->date !!}" disabled>
+            </div>
         </div>
         <form action="{{ route('menu-restaurant') }}" method="GET">
             @csrf

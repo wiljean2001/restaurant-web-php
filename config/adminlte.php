@@ -326,7 +326,16 @@ return [
                     'text' => 'Gestionar mesa',
                     'url'  => 'admin/mesas/gestionar',
                 ],
-
+            ],
+        ],
+        [
+            'text'    => 'Pedidos',
+            'icon'    => 'fas fa-wine-bottle',
+            'submenu' => [
+                [
+                    'text' => 'Ver nuevos',
+                    'url'  => 'admin/pedidos/nuevos',
+                ],
             ],
         ],
         // ['header' => 'Ventanas'],
@@ -360,19 +369,19 @@ return [
             // 'icon' => 'fas fa-fw fa-user',
             'text_color' => 'success',
         ],
-        [
-            'text' => 'Cambiar contraseña',
-            'url'  => 'admin/settings',
-            'icon_color' => 'cyan',
-            // 'icon' => 'fas fa-fw fa-lock',
-            'text_color' => 'success',
-        ],
-        [
-            'text'       => 'About',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-            'text_color' => 'success',
-        ],
+        // [
+        //     'text' => 'Cambiar contraseña',
+        //     'url'  => 'admin/settings',
+        //     'icon_color' => 'cyan',
+        //     // 'icon' => 'fas fa-fw fa-lock',
+        //     'text_color' => 'success',
+        // ],
+        // [
+        //     'text'       => 'About',
+        //     'icon_color' => 'cyan',
+        //     'url'        => '#',
+        //     'text_color' => 'success',
+        // ],
     ],
 
 

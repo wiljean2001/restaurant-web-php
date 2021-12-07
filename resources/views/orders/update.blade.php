@@ -12,10 +12,6 @@
             <x-adminlte-card title="PLASTOS" theme="maroon" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($dishes_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Dish Table --}}
                     <x-adminlte-datatable id="table1" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -32,16 +28,10 @@
                                     <td>{!! $dish_o->dishes->name !!}</td>
                                     <td>{!! $dish_o->dishes->description !!}</td>
                                     <td>$/ {!! $dish_o->dishes->price !!}</td>
-                                    {{-- <td> --}}
-                                    {{-- <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50"> --}}
-                                    {{-- </td> --}}
                                     <td>
-                                        <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="">
-                                            <i class="fas fa-utensils"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="">
-                                            <i class="fas fa-drumstick-bite"></i>
-                                        </button>
+                                        <x-adminlte-button name="{!! $dish_o->quantify !!}" id="{!! $dish_o->id !!}"
+                                            label="Editar" theme="warning" icon="fas fa-pen-square" data-toggle="modal"
+                                            class="btn-dish-edit" />
                                     </td>
                                 </tr>
                             @endforeach
@@ -54,10 +44,6 @@
             <x-adminlte-card title="BEBIDAS" theme="success" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($drinks_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Drink Table --}}
                     <x-adminlte-datatable id="table2" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -74,16 +60,10 @@
                                     <td>{!! $drink_o->drinks->name !!}</td>
                                     <td>{!! $drink_o->drinks->description !!}</td>
                                     <td>$/ {!! $drink_o->drinks->price !!}</td>
-                                    {{-- <td> --}}
-                                    {{-- <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50"> --}}
-                                    {{-- </td> --}}
                                     <td>
-                                        <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="">
-                                            <i class="fas fa-utensils"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="">
-                                            <i class="fas fa-drumstick-bite"></i>
-                                        </button>
+                                        <x-adminlte-button name="{!! $drink_o->quantify !!}" id="{!! $drink_o->id !!}"
+                                            label="Editar" theme="warning" icon="fas fa-pen-square" data-toggle="modal"
+                                            class="btn-drink-edit" />
                                     </td>
                                 </tr>
                             @endforeach
@@ -96,10 +76,6 @@
             <x-adminlte-card title="LICORES" theme="purple" theme-mode="outline" icon="fas fa-lg fa-bell" collapsible
                 maximizable>
                 @foreach ($spirits_o as $key => $order)
-                    <div class="bg-gradient-light w-100 d-flex justify-content-lg-around">
-                        <label>Fecha {!! $order->date !!}</label>
-                        <label>Mesa {{ $table[0]->num_table }}</label>
-                    </div>
                     {{-- Spirit Table --}}
                     <x-adminlte-datatable id="table3" :heads="$headsFood" head-theme="light" :config='$config' with-buttons
                         with-footer hoverable>
@@ -113,19 +89,13 @@
                                     <td>{!! $key + 1 !!}</td>
                                     <td>S/ {!! $spirit_o->price !!}</td>{{-- Total --}}
                                     <td>{!! $spirit_o->quantify !!} uds.</td>
-                                    <td>{!! $spirit_o->dishes->name !!}</td>
-                                    <td>{!! $spirit_o->dishes->description !!}</td>
-                                    <td>$/ {!! $spirit_o->dishes->price !!}</td>
-                                    {{-- <td> --}}
-                                    {{-- <img src="{!! asset('storage/' . $row->image->url) !!}" alt="imagen-plato" class=" w-50"> --}}
-                                    {{-- </td> --}}
+                                    <td>{!! $spirit_o->spirits->name !!}</td>
+                                    <td>{!! $spirit_o->spirits->description !!}</td>
+                                    <td>$/ {!! $spirit_o->spirits->price !!}</td>
                                     <td>
-                                        <button class="btn btn-xs btn-default text-primary mx-1 shadow" title="">
-                                            <i class="fas fa-utensils"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-default text-danger mx-1 shadow" title="">
-                                            <i class="fas fa-drumstick-bite"></i>
-                                        </button>
+                                        <x-adminlte-button name="{!! $spirit_o->quantify !!}" id="{!! $spirit_o->id !!}"
+                                            label="Editar" theme="warning" icon="fas fa-pen-square" data-toggle="modal"
+                                            class="btn-spirit-edit" />
                                     </td>
                                 </tr>
                             @endforeach
@@ -134,13 +104,124 @@
                 @endforeach
             </x-adminlte-card>
         </div>
-        <form action="{{ route('menu-restaurant') }}" method="GET">
-            @csrf
-            {{-- <input type="text" name="endOrder" hidden value="yes"> --}}
-            <div class="btn-flotante px-3 py-2">
-                <x-adminlte-button label="FINALIZAR PEDIDO" theme="success" icon="fas fa-lg fa-save" name="endOrder"
-                    type="submit" />
+        <div class="mx-5 mx-lg-5 mb-5 mb-lg-5 d-flex justify-content-lg-around">
+            <div>
+                <label for="">Total a pagar: S/</label>
+                <input type="text" value="{{ $total }}" disabled>
             </div>
-        </form>
+        </div>
     </div>
+    {{-- Modals --}}
+    <div class="modal fade" id="ModalDishEdit" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Modificar plato</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('dish.orders.edit') }}" method="POST" class="text-center">
+                        <div>
+                            @csrf
+                            <input type="text" name="idDiOrder" id="idDiO" hidden>
+                            <div class="form-floating mb-3 mx-3 mx-lg-3">
+                                <input type="number" class="form-control" id="quantifyDi"
+                                    placeholder="Cantidad a solicitar; Ejem.: 4" required name="quantify">
+                                <label for="quantifyDi">Cantidad</label>
+                            </div>
+                            <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-right">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalDrinkEdit" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Modificar bebida</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('drink.orders.edit') }}" method="POST" class="text-center">
+                        <div>
+                            @csrf
+                            <input type="text" name="idDrOrder" id="idDrO" hidden>
+                            <div class="form-floating mb-3 mx-3 mx-lg-3">
+                                <input type="number" class="form-control" id="quantifyDr"
+                                    placeholder="Cantidad a solicitar; Ejem.: 4" required name="quantify">
+                                <label for="quantifyDr">Cantidad</label>
+                            </div>
+                            <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-right">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="ModalSpiritEdit" aria-hidden="true" aria-labelledby="exampleModalToggleLabel"
+        tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Modificar licor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('spirit.orders.edit') }}" method="POST" class="text-center">
+                        <div>
+                            @csrf
+                            <input type="text" name="idSpOrder" id="idSpO" hidden>
+                            <div class="form-floating mb-3 mx-3 mx-lg-3">
+                                <input type="number" class="form-control" id="quantifySp"
+                                    placeholder="Cantidad a solicitar; Ejem.: 4" required name="quantify">
+                                <label for="quantifySp">Cantidad</label>
+                            </div>
+                            <x-adminlte-button type="submit" class="mr-auto w-25" theme="success" label="Solicitar" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer text-right">
+                </div>
+            </div>
+        </div>
+    </div>
+@stop
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('.btn-dish-edit').click(function() {
+                // Capturamos el valor de quantify id para insertarlo en el input del modal
+                var id = this.id; // id dish
+                var name = this.name; // cuantify
+                document.querySelector('#idDiO').value = id;
+                document.querySelector('#quantifyDi').value = name;
+                $('#ModalDishEdit').modal('show');
+            });
+            $('.btn-drink-edit').click(function() {
+                // Capturamos el valor de quantify id para insertarlo en el input del modal
+                var id = this.id; // id dish
+                var name = this.name; // cuantify
+                document.querySelector('#idDrO').value = id;
+                document.querySelector('#quantifyDr').value = name;
+                $('#ModalDrinkEdit').modal('show');
+            });
+            $('.btn-spirit-edit').click(function() {
+                // Capturamos el valor de quantify id para insertarlo en el input del modal
+                var id = this.id; // id dish
+                var name = this.name; // cuantify
+                document.querySelector('#idSpO').value = id;
+                document.querySelector('#quantifySp').value = name;
+                $('#ModalSpiritEdit').modal('show');
+            });
+        });
+    </script>
 @stop

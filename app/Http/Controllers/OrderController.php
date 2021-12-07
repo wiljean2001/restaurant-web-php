@@ -20,7 +20,7 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
-        $tables = Table::all();
+        $tables = Table::where('state', false)->get();
         $dishes = Dish::paginate(6);
         $drinks = Drink::paginate(6);
         $spirits = Spirit::paginate(6);
@@ -76,8 +76,10 @@ class OrderController extends Controller
             'client_id' => $clients->id,
             'waiter_id' => $request->waiter_id
         ]);
-
-        $orders->tables->state = true;
+        Table::where('id', $request->idTable)
+            ->update([
+                'state' => true,
+            ]);
 
         if ($orders->save() && $clients->save()) {
             back()->with('message-order', 'Orden generada exitosamente!.');

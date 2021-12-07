@@ -177,8 +177,8 @@
             document.querySelector('#numtable').value = name;
             state = document.querySelector('.state_table').value;
             var capacity = document.querySelector('.capacity_table').value;
-            console.log([state, capacity, data[2]]);
-            if (state == 1) {
+            // console.log([state, capacity, data[2]]);
+            if (data[2] == "Ocupado") {
                 document.querySelector('#stateTable').checked = true;
             } else {
                 document.querySelector('#stateTable').checked = false;

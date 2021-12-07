@@ -134,9 +134,7 @@
                         @endif
 
                         @foreach ($tables as $table)
-                            @if ($table->state == false)
                                 <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
-                            @endif
                         @endforeach
                     </x-adminlte-select>
                     <input type="text" class="form-control bg-white" id="idOrder" name="isOrder" disabled>

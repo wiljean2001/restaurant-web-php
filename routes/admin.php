@@ -62,6 +62,10 @@ Route::post('roles/actualizar', [RoleController::class, 'update'])->middleware('
 // Orders
 Route::get('pedidos/nuevos', [OrderController::class, 'ordersNew'])->name('orders.new');
 Route::get('pedidos/nuevos/{order_id}', [OrderController::class, 'ordersNew'])->name('orders.new.now');
+Route::post('pedidos/nuevos', [OrderController::class, 'ordersNewFin'])->name('orders.new.now.final');
+
+Route::get('pedidos/entregados', [OrderController::class, 'ordersNewDelivered'])->name('orders.show');
+Route::get('pedidos/entregados/{order_id}', [OrderController::class, 'ordersNewDelivered'])->name('orders.show.now');
 
 // Registrar usuarios
 Route::get('registrar-usuario', [UserController::class, 'create'])

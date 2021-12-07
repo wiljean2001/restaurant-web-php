@@ -336,6 +336,10 @@ return [
                     'text' => 'Ver nuevos',
                     'url'  => 'admin/pedidos/nuevos',
                 ],
+                [
+                    'text' => 'Ver entregados',
+                    'url'  => 'admin/pedidos/entregados',
+                ],
             ],
         ],
         // ['header' => 'Ventanas'],

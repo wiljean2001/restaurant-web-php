@@ -8,7 +8,8 @@ $num_pedidos = null;
 @section('content')
     <div class="w-100 d-flex">
         <div class="w-25 pr-3 pr-lg-3 py-3 py-lg-3 vh-100 overflow-scroll">
-            <h2>Nuevos Pedidos</h2>
+            <h2>Pedidos</h2>
+            <h2 class="ml-3 ml-lg-3">entregados</h2>
             @foreach ($orders as $order)
                 @foreach ($order->dish_Orders as $dishO)
                     @php
@@ -28,7 +29,7 @@ $num_pedidos = null;
                         $num_pedidos++;
                     @endphp
                 @endforeach
-                <a href="{{ route('orders.new.now', $order->id) }}" class="text-decoration-none">
+                <a href="{{ route('orders.show.now', $order->id) }}" class="text-decoration-none">
                     <div class="info-box bg-gradient-warning">
                         <span class="info-box-icon"> <i class="fas fa-shopping-cart"></i></span>
                         <div class="info-box-content">
@@ -51,7 +52,7 @@ $num_pedidos = null;
         </div>
         <div class="w-75 shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
             <nav class="d-flex justify-content-lg-start align-items-lg-baseline">
-                <a href="{{ route('orders.new') }}"><i class="fas fa-arrow-left fa-1x"></i></a>
+                <a href="{{ route('orders.show') }}"><i class="fas fa-arrow-left fa-1x"></i></a>
                 <h2 class="h5 ml-3 ml-lg-3">Pedido:</h2>
             </nav>
             @if ($ordersNow == null)
@@ -119,13 +120,6 @@ $num_pedidos = null;
                         <div class="d-flex justify-content-lg-end mx-5 mx-lg-5 align-items-center">
                             <span class="h6 mr-4 mr-lg-4 opacity-50">Total:</span>
                             <span class="h5">S/ {{ $total }}</span>
-                        </div>
-                        <div class="d-flex justify-content-lg-end mx-5 mx-lg-5 my-2 my-lg-2 align-items-center">
-                            <form action="{{ route('orders.new.now.final') }}" method="POST">
-                                @csrf
-                                <input type="text" value="{{ $ordersNow[0]->id }}" name="order_id" hidden>
-                                <button type="submit" class="btn-outline-success px-4 py-2 border-none">FINALIZADO</button>
-                            </form>
                         </div>
                     </div>
                 </div>

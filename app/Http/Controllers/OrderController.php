@@ -257,29 +257,16 @@ class OrderController extends Controller
     public function ordersNew(Request $request, $order_id = 0)
     {
         $ordersNow = null;
-        $orders = Order::where('finalized', true)->get();
+        $orders = Order::where('finalized', true)
+            ->where('delivered', false)
+            ->get();
+
         if ($order_id != 0) {
             $ordersNow = Order::where('id', $order_id)
+                ->where('delivered', false)
                 ->where('finalized', true)
                 ->get();
             // dd($ordersNow);
-        }
-        // dd($orders[0]->dish_Orders[0]->dishes);
-        $total = null;
-        $num_pedidos = null;
-        foreach ($orders as $value) {
-            foreach ($value->dish_Orders as $dishO) {
-                $total += $dishO->price;
-                $num_pedidos++;
-            }
-            foreach ($value->drink_Orders as $drinkO) {
-                $total += $drinkO->price;
-                $num_pedidos++;
-            }
-            foreach ($value->dish_Orders as $spiritO) {
-                $total += $spiritO->price;
-                $num_pedidos++;
-            }
         }
         // dd($num_pedidos);
         $heads = $this->getHeadsFoodForOrdersDish();
@@ -289,11 +276,43 @@ class OrderController extends Controller
             compact(
                 'heads',
                 'config',
-                'num_pedidos',
                 'orders',
                 'ordersNow',
             )
         );
+    }
+    public function ordersNewDelivered(Request $request, $order_id = 0)
+    {
+        $ordersNow = null;
+        $orders = Order::where('delivered', true)->get();
+
+        if ($order_id != 0) {
+            $ordersNow = Order::where('id', $order_id)
+                ->where('delivered', true)
+                ->get();
+            // dd($ordersNow);
+        }
+        // dd($num_pedidos);
+        $heads = $this->getHeadsFoodForOrdersDish();
+        $config = $this->getConfig();
+        return view(
+            'admin.orders.show',
+            compact(
+                'heads',
+                'config',
+                'orders',
+                'ordersNow',
+            )
+        );
+    }
+    public function ordersNewFin(Request $request)
+    {
+        Order::where('finalized', true)
+            ->where('id', $request->order_id)
+            ->update([
+                'delivered' => true,
+            ]);
+        return redirect()->route('orders.new.now', $request->order_id);
     }
 
     private function getHeadsFood()

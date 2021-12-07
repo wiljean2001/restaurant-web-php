@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'date', 'hour', 'table_id', 'client_id', 'waiter_id'];
+    protected $fillable = ['id', 'date', 'finalized', 'delivered', 'hour', 'table_id', 'client_id', 'waiter_id'];
     public function dish_Orders()
     {
         // Relacion de uno a muchos entre Order y Dish_order

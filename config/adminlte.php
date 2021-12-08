@@ -149,7 +149,7 @@ return [
     'sidebar_mini' => 'lg',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => true,
+    'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => false,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
@@ -355,12 +355,17 @@ return [
         //     'url'     => 'admin',
         // ],
         [
-            'header' => 'Roles',
+            'header' => 'Administrador',
             'can' => ['admin.roles']
+        ], [
+            'text' => 'Gestionar roles',
+            'url'  => 'admin/roles/mostrar',
+            'icon' => 'fas fa-user-tag',
+            'can' => ['admin.roles'],
         ],
         [
-            'text' => 'Mostrar',
-            'url'  => 'admin/roles/mostrar',
+            'text' => 'Gestionar mozos',
+            'url'  => 'admin/mozo/gestionar',
             'icon' => 'fas fa-user-tag',
             'can' => ['admin.roles'],
         ],
@@ -538,9 +543,9 @@ return [
                 [
                     'type' => 'css',
                     'asset' => false,
-                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/purple/pace-theme-loading-bar.min.css',
-                    // 'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/purple/pace-theme-corner-indicator.min.css',
-                    // 'location' => 'vendor/pace-progress/themes/blue/pace-theme-corner-indicator.min.css',
+                    // 'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/purple/pace-theme-loading-bar.min.css',
+                    'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/white/pace-theme-minimal.min.css',
+                    // 'location' => 'vendor/pace-progress/themes/blue/pace-theme-corner-indicator.css',
                 ],
                 [
                     'type' => 'js',
@@ -576,6 +581,26 @@ return [
                     'type' => 'js',
                     'asset' => true,
                     'location' => 'vendor/bs-custom-file-input/bs-custom-file-input.min.js',
+                ],
+            ],
+        ],
+        'TempusDominusBs4' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/moment/moment.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js',
+                ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css',
                 ],
             ],
         ],

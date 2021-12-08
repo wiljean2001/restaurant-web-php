@@ -3,7 +3,7 @@ $total = null;
 $num_pedidos = null;
 @endphp
 @extends('adminlte::page')
-@section('title', 'bebida')
+@section('title', 'Pedidos')
 
 @section('content')
     <div class="w-100 d-flex">
@@ -59,7 +59,7 @@ $num_pedidos = null;
                 <img src="{{ asset('img/table-phone.png') }}" alt="" class="w-100  p-5 p-lg-5">
             @else
                 <div class="container-fluid">
-                    <div class="bg-gradient-light d-flex justify-content-lg-between p-3 p-lg-3">
+                    <div class="bg-gradient-light d-flex justify-content-lg-between justify-content-between p-3 p-lg-3">
                         <h2 class="h4">Hora</h2>
                         <strong class="h4 text-red">{{ $ordersNow[0]->hour }}</strong>
                     </div>

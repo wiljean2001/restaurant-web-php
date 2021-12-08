@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pllato')
+@section('title', 'Plato')
 @section('content')
 <div class="d-flex flex-row w-100 flex-wrap">
     <div class="w-50">

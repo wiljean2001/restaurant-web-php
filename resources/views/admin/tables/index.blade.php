@@ -47,8 +47,6 @@
                             <td>{!! $row->capacity !!}</td>
                             <td>
                                 <div>
-                                    <input type="text" value="{!! $row->state !!}" class="state_table" hidden>
-                                    <input type="text" value="{!! $row->capacity !!}" class="capacity_table" hidden>
                                     <x-adminlte-button id="{!! $row->id !!}" name="{!! $row->num_table !!}"
                                         icon="fas fa-pen-square" label="Editar" data-toggle="modal"
                                         class="btn btn-primary modalTableEdit w-auto m-1 m-lg-1" theme="warning" />
@@ -131,7 +129,7 @@
                 <div class="toast-header">
                     <i class="far fa-check-circle green"></i>
                     <strong class="mr-auto ml-1">Finalizado</strong>
-                    <small>{{ Time() }}</small>
+                    <small>{{ date('m-d-Y h:i:s a') }}</small>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
@@ -149,7 +147,7 @@
                 <div class="toast-header ">
                     <i class="fas fa-exclamation-triangle"></i>
                     <strong class="mr-auto ml-1">Error</strong>
-                    <small>{{ time() }}</small>
+                    <small>{{ date('m-d-Y h:i:s a') }}</small>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
                 <div class="toast-body">
@@ -169,21 +167,18 @@
             var table = $('#table3').DataTable();
             var id = this.id;
             var name = this.name;
-            var state = null;
             var row = $(this).parent().parent()[0];
             var data = table.row(row).data();
             // table id
             document.querySelector('#idTable').value = id;
             document.querySelector('#numtable').value = name;
-            state = document.querySelector('.state_table').value;
-            var capacity = document.querySelector('.capacity_table').value;
-            // console.log([state, capacity, data[2]]);
+            // console.log([state, capacity, data[3]]);
             if (data[2] == "Ocupado") {
                 document.querySelector('#stateTable').checked = true;
             } else {
                 document.querySelector('#stateTable').checked = false;
             }
-            document.querySelector('#capac_table').value = capacity;
+            document.querySelector('#capac_table').value = data[3];
 
             $('#ModalTablesEdit').modal('show');
         });

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'licor')
+@section('title', 'Licor')
 @section('content')
 
 <div class="container-fluid w-auto">

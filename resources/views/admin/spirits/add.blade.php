@@ -1,5 +1,5 @@
 @extends('adminlte::page')
-@section('title', 'licor')
+@section('title', 'Licor')
 
 @section('content')
 <div class="d-flex flex-row w-100">

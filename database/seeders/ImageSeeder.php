@@ -104,15 +104,15 @@ class ImageSeeder extends Seeder
         ]);
 
         // SPIRITS
-        Image::create([
-            'url' => '\img\spirits\vino_tinto_reserva_750ML.jpg',
-            'imageable_id' => '1',
-            'imageable_type' => 'App\Models\Spirit'
-        ]);
-        Image::create([
-            'url' => '\img\spirits\pisco_quebranta750ML.jpg',
-            'imageable_id' => '2',
-            'imageable_type' => 'App\Models\Spirit'
-        ]);
+        // Image::create([
+        //     'url' => '\img\spirits\vino_tinto_reserva_750ML.jpg',
+        //     'imageable_id' => '1',
+        //     'imageable_type' => 'App\Models\Spirit'
+        // ]);
+        // Image::create([
+        //     'url' => '\img\spirits\pisco_quebranta750ML.jpg',
+        //     'imageable_id' => '2',
+        //     'imageable_type' => 'App\Models\Spirit'
+        // ]);
     }
 }

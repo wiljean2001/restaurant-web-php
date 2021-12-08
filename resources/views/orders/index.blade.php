@@ -4,16 +4,34 @@
 
 @section('content')
     {{-- HEADER --}}
-    <div class="header py-0 py-lg-0 bi-header h-auto">
-        <nav class="nav justify-content-end py-lg-4 py-4 px-lg-3 px-3">
-            <a class="nav-link text-dark outline-white" href="{{ route('login') }}">
-                <i class="fas fa-lock"></i>
-                <span>{{ __('Iniciar sesión') }}</span>
-            </a>
-            {{-- <a class="nav-link text-dark" href="{{ route('register-user') }}">
-                <i class="fas fa-user"></i>
-                <span>{{ __('Registrar') }}</span>
-            </a> --}}
+    <div class="header  bi-header h-auto">
+        {{-- navbar-expand-lg --}}
+        <nav class="navbar">
+            <div class="container-fluid d-flex justify-content-between justify-content-lg-between">
+                <a class="navbar-brand w-75"></a>
+                {{-- <img class="w-75 max-w-xl"
+                        src="{{ asset('favicon/logo-restaurant_white_250px.png') }}" alt=""> --}}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars fa-2x"></i>
+                </button>
+                <div class="collapse navbar-collapse text-right" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active text-light" aria-current="page" href="{{ route('login') }}">
+                                <i class="fas fa-lock"></i>
+                                <strong>Iniciar sesión</strong>
+                            </a>
+                            {{-- <a class="nav-link text-dark" href="{{ route('register-user') }}">
+                                <i class="fas fa-user"></i>
+                                <span>{{ __('Registrar') }}</span>
+                            </a> --}}
+                            {{-- <a class="nav-link active" aria-current="page" href="#">Home</a> --}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </nav>
         <div class="container">
             <div class="pt-5 mb-lg-4 py-lg-5">
@@ -54,7 +72,7 @@
         </div>
     </div>
     {{-- menu order --}}
-    <div class="bg-white container">
+    <div class="bg-white container-lg">
         <nav id="navbar-example2" class="navbar navbar-light bg-white px-3" data-bs-spy="scroll">
             {{-- <a class="navbar-brand" href="#">Navbar</a> --}}
             <ul class="nav nav-pills">
@@ -71,23 +89,22 @@
                         <i class="fas fa-stream"></i> Ver licores</a>
                 </li>
             </ul>
-        </nav>
-        <ul class="nav nav-pills w-100  d-flex flex-row flex-wrap justify-content-end">
-            <form action="{{ route('order.create') }}" method="POST"
-                class="d-flex flex-row flex-wrap justify-content-around align-items-lg-center">
-                @csrf
-                <li class="mr-4 mr-lg-4">
-                    <div class="accordion" id="accordionExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Cliente
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                                data-bs-parent="#accordionExample">
-                                <div class="accordion-body">
+            <ul class="nav nav-pills d-flex flex-row flex-wrap justify-content-end">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Generar orden
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <form action="{{ route('order.create') }}" method="POST"
+                                    class="d-flex flex-row flex-wrap justify-content-around align-items-lg-center">
+                                    {{-- <li class="mr-4 mr-lg-4"> --}}
+                                    @csrf
                                     <div class="form-floating mb-3 mx-3 mx-lg-3">
                                         <input type="text" class="form-control" id="floatingInput"
                                             placeholder="DNI: 73889330" name="dni_client">
@@ -107,7 +124,7 @@
                                     <div class="form-floating">
                                         <select class="form-select" id="floatingSelectGrid"
                                             aria-label="Floating label select example" name="waiter_id">
-                                            <option selected>Seleccionar Mozo</option>
+                                            <option value="" selected>Seleccionar Mozo</option>
                                             @foreach ($waiters as $waiter)
                                                 <option value="{{ $waiter->id }}">
                                                     {{ $waiter->name . ' ' . $waiter->lname }}
@@ -116,39 +133,41 @@
                                         </select>
                                         <label for="floatingSelectGrid">Mozo:</label>
                                     </div>
-                                </div>
+                                    <div class="mr-4 mr-lg-4">
+                                        <x-adminlte-select name="idTable" label-class="text-lightblue" igroup-size="sm">
+                                            <x-slot name="prependSlot">
+                                                <div class="input-group-text">
+                                                    {{ __('Mesas:') }}
+                                                </div>
+                                            </x-slot>
+                                            @if (Session::has('tableID'))
+                                                <option value="{{ Session::get('tableID') }}" selected>Mesa
+                                                    {{ Session::get('tableID') }}</option>
+                                            @endif
+                                            @foreach ($tables as $table)
+                                                <option value="{{ $table->id }}">Mesa {{ $table->num_table }}
+                                                </option>
+                                            @endforeach
+                                        </x-adminlte-select>
+                                        <input type="text" class="form-control bg-white" id="idOrder" name="isOrder"
+                                            disabled>
+                                    </div>
+                                    <div class="nav-item">
+                                        <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden"
+                                            data-toggle="modal" class="btn btn-primary mr-5 mr-lg-5" name="submit" />
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
                 </li>
-                <li class="mr-4 mr-lg-4">
-                    <x-adminlte-select name="idTable" label-class="text-lightblue" igroup-size="sm">
-                        <x-slot name="prependSlot">
-                            <div class="input-group-text">
-                                {{ __('Mesas:') }}
-                            </div>
-                        </x-slot>
-                        @if (Session::has('tableID'))
-                            <option value="{{ Session::get('tableID') }}" selected>Mesa
-                                {{ Session::get('tableID') }}</option>
-                        @endif
-
-                        @foreach ($tables as $table)
-                                <option value="{{ $table->id }}">Mesa {{ $table->num_table }}</option>
-                        @endforeach
-                    </x-adminlte-select>
-                    <input type="text" class="form-control bg-white" id="idOrder" name="isOrder" disabled>
-                </li>
-                <li class="nav-item">
-                    <x-adminlte-button type="submit" icon="fas fa-plus text-red" label="Crear orden" data-toggle="modal"
-                        class="btn btn-primary mr-5 mr-lg-5" name="submit" />
-                </li>
-            </form>
-        </ul>
+            </ul>
+        </nav>
     </div>
 
     {{-- Listar Platos / cards de platos --}}
-    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center h-auto">
+    <div class="container-lg shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded text-center h-auto">
         <h1 class=" my-4" id="platos">Menu de platos</h1>
         <div class="d-flex flex-wrap flex-row justify-content-lg-around justify-content-center">
             @foreach ($dishes as $dish)
@@ -182,7 +201,7 @@
     </div>
 
     {{-- Listar Bebidas / cards de bebidas --}}
-    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
+    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container-lg text-center">
         <h1 class=" my-4" id="bebidas">Menu de bebidas</h1>
         <div class="d-flex flex-wrap flex-row justify-content-lg-around justify-content-center">
             @foreach ($drinks as $drink)
@@ -214,7 +233,7 @@
     </div>
 
     {{-- Listar Licores / cards de licores --}}
-    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container text-center">
+    <div class="shadow-lg p-3 mb-5 mb-lg-5 mt-3 mt-lg-3 bg-body rounded container-lg text-center">
         <h1 class=" my-4" id="licores">Menu de licores</h1>
         <div class="d-flex flex-wrap flex-row justify-content-lg-around justify-content-center">
             @foreach ($spirits as $spirit)
@@ -259,7 +278,7 @@
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="{{  asset('img/spirits.png')  }}" class="d-block w-100" alt="...">
+                    <img src="{{ asset('img/spirits.png') }}" class="d-block w-100" alt="...">
                 </div>
                 @foreach ($recomend->slice(0, 2) as $rec)
                     <div class="carousel-item">

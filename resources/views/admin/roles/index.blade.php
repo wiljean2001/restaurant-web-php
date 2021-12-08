@@ -8,7 +8,7 @@
     <h1 class="py-lg-2 py-2 text-left">MOSTRAR ROLES Y USUARIOS</h1>
     <form action="{{ route('role.update') }}" method="POST">
       @csrf
-      <table class="table text-left  px-5 px-lg-5">
+      <table class="table text-left  px-5 px-lg-5 table-responsive-lg">
         <thead>
           <tr>
             <th scope="col">Usuario</th>

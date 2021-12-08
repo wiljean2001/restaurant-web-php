@@ -60,7 +60,7 @@ class TableController extends Controller
     {
         try {
             $result = Table::where('id', '=', $request->id)->delete();
-            back()->with('message', 'Tabla eliminada exitosamente!.');
+            back()->with('message', 'Mesa eliminada exitosamente!.');
         } catch (Exception $exec) {
             back()->with('error', 'Error al eliminar la mesa. Mesa ocuapada por un proceso de orden, por favor espere que finalice dicho proceso');
         }

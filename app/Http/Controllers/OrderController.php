@@ -26,35 +26,25 @@ class OrderController extends Controller
         $spirits = Spirit::paginate(6);
         $waiters = Waiter::all();
         $recomend = Image::inRandomOrder()->get(); // Recomendacion de plato aleatorio
-        // Name end-order -> finaliza la orden
-        if ($request->endOrder) {
-            // Vuelve a la tabla al estado disponible
-            Table::where('id', $request->session()->get('tableID'))
-                ->update([
-                    'state' => false
-                ]);
-            Order::where('id', $request->session()->get('orderId'))
-                ->update([
-                    'finalized' => true
-                ]);
-            // alerta al mesero que se finalizo una orden.
-            $request->session()->forget('orderId');
-            $request->session()->forget('tableID');
-            back()->with('message-order', 'Orden finalizada exitosamente!.');
-            return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables', 'recomend'));
-        }
-
         back()->with('orderId', $request->session()->get('orderId'));
         back()->with('tableID', $request->session()->get('tableID'));
         back()->with('client_id', $request->session()->get('client_id'));
         back()->with('waiter_id', $request->session()->get('waiter_id'));
-        return view('orders.index', compact('dishes', 'drinks', 'spirits', 'tables', 'waiters', 'recomend'));
+        return view('orders.index', compact(
+            'dishes',
+            'drinks',
+            'spirits',
+            'tables',
+            'waiters',
+            'recomend'
+        ));
     }
 
-    // Metodo para generar
+    // Metodo para generar  
     public function create(Request $request)
     {
         // return redirect()->route('menu-restaurant');
+        // dd($request->id);
         back()->with(
             'error-order',
             'Datos obligatorios: Mesero, nombre del cliente y seleccionar una mesa.'
@@ -93,7 +83,7 @@ class OrderController extends Controller
             ->with('client_id', $clients->id)
             ->with('waiter_id', $request->waiter_id);
     }
-    // , $idTable
+    // 
     public function show(Request $request)
     {
         if (!$request->session()->has('tableID') && !$request->session()->has('orderId')) {
@@ -253,7 +243,27 @@ class OrderController extends Controller
 
         return view('orders.delete', compact('dishes_o', 'drinks_o', 'spirits_o', 'total', 'headsFood', 'config'));
     }
-
+    // Metodo para finalizar la orden (orden lista para ser preparada)
+    public function orderFinalized(Request $request)
+    {
+        Table::where('id', $request->session()->get('tableID'))
+            ->update([
+                'state' => false
+            ]);
+        Order::where('id', $request->session()->get('orderId'))
+            ->update([
+                'finalized' => true
+            ]);
+        // dd([$request->session()->get('orderId'), $request->session()->get('tableID')]);
+        // alerta al mesero que se finalizo una orden.
+        $request->session()->forget('orderId');
+        $request->session()->forget('tableID');
+        $request->session()->forget('client_id');
+        $request->session()->forget('waiter_id');
+        return redirect()->route('menu-restaurant')
+            ->with('message-order', 'Orden finalizada exitosamente!, Por favor espere para su preparación');
+    }
+    // Ordenes finaliadas listas para ser preparadas (visualizacion para los trabajadores del restaurant)
     public function ordersNew(Request $request, $order_id = 0)
     {
         $ordersNow = null;
@@ -281,6 +291,7 @@ class OrderController extends Controller
             )
         );
     }
+    // Ordenes ya preparadas y entregadas
     public function ordersNewDelivered(Request $request, $order_id = 0)
     {
         $ordersNow = null;
@@ -305,6 +316,7 @@ class OrderController extends Controller
             )
         );
     }
+    // Metodo para marcar la orden como finalizado
     public function ordersNewFin(Request $request)
     {
         Order::where('finalized', true)
@@ -312,16 +324,16 @@ class OrderController extends Controller
             ->update([
                 'delivered' => true,
             ]);
-        return redirect()->route('orders.new.now', $request->order_id);
+        return redirect()->route('orders.new');
     }
 
     private function getHeadsFood()
     {
         return $heads = [
             ['label' => 'Id', 'width' => 0],
-            'Total S/',
-            'Cantidad Und.',
-            'Plato',
+            ['label' => 'Total S/', 'width' => 0],
+            ['label' => 'Cantidad Und.', 'width' => 0],
+            ['label' => 'Nombre', 'width' => 15],
             ['label' => 'Descripcion', 'width' => 40],
             ['label' => 'Precio Und.', 'width' => 0],
             ['label' => '', 'width' => 0],

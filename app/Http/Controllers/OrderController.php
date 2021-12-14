@@ -106,12 +106,11 @@ class OrderController extends Controller
             ->where('table_id', $request->session()->get('tableID'))
             ->where('id', $request->session()->get('orderId'))->get();
 
-        $table = Table::select('num_table')->where('id', $request->session()->get('tableID'))->get();
+        $table = Table::select('num_table')
+            ->where('id', $request->session()->get('tableID'))
+            ->get();
+        $mozo = Waiter::where('id', $dishes_o[0]->waiter_id)->get();
         // $table = $table->num_table;
-        back()->with('orderId', $request->session()->get('orderId'));
-        back()->with('tableID', $request->session()->get('tableID'));
-        back()->with('client_id', $request->session()->get('client_id'));
-        back()->with('waiter_id', $request->session()->get('waiter_id'));
         $total = null;
         foreach ($dishes_o as $value) {
             foreach ($value->dish_Orders as $dishO) {
@@ -128,8 +127,10 @@ class OrderController extends Controller
                 $total += $spiritO->price;
             }
         }
-        $mozo = Waiter::where('id', $dishes_o[0]->waiter_id)->get();
-        // dd();
+        back()->with('orderId', $request->session()->get('orderId'));
+        back()->with('tableID', $request->session()->get('tableID'));
+        back()->with('client_id', $request->session()->get('client_id'));
+        back()->with('waiter_id', $request->session()->get('waiter_id'));
         return view(
             'orders.show',
             compact(
@@ -181,7 +182,7 @@ class OrderController extends Controller
                 $total += $spiritO->price;
             }
         }
-
+        // Sessions
         back()->with('orderId', $request->session()->get('orderId'));
         back()->with('tableID', $request->session()->get('tableID'));
         back()->with('client_id', $request->session()->get('client_id'));

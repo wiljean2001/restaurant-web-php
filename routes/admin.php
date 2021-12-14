@@ -72,6 +72,9 @@ Route::post('mozo/eliminar', [WaiterController::class, 'destroy'])->name('waiter
 Route::get('registrar-usuario', [UserController::class, 'create'])
     ->middleware('can:admin.roles')
     ->name('register-user');
+Route::post('registrar-usuario', [UserController::class, 'store'])
+    ->name('register.new.user');
+
 // ignorar
 // Route::get('prueba/perfil', function(){
 //     return view('profile');    

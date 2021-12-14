@@ -11,10 +11,6 @@ class RoleController extends Controller
 {
     public function index()
     {
-        // SELECT u.id as userID, u.name as userName, r.id as rolID, r.name as rolName 
-        // FROM model_has_roles rm
-        // INNER JOIN roles r ON rm.role_id = r.id 
-        // join users u ON rm.model_id = u.id;
         $roles = Role::all();
         $users = User::select(
             'users.id as userID',

@@ -1,14 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
 
-class UserController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,14 +16,9 @@ class UserController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('auth.register');
+        return view('orders.index');
     }
 
     /**
@@ -36,13 +27,9 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, CreatesNewUsers $creator)
+    public function store(Request $request)
     {
-        event(new Registered(
-            $user = $creator->create($request->all())
-        ));
-        $user->roles()->sync($request->idRole);
-        return redirect()->route('role.show');
+        //
     }
 
     /**

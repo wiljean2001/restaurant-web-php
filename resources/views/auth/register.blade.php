@@ -7,10 +7,12 @@
     <div class="container card mt-5 mt-lg-5">
         <div class="card-body register-card-body">
             <p class="login-box-msg">Registrar nuevo usuario</p>
-
-            <form action="../../index.html" method="post">
+            <form action="{{ route('register.new.user') }}" method="post">
+                @csrf
+                @method('POST')
+                <input type="number" name="idRole" value="1" hidden>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Nombre completo">
+                    <input type="text" class="form-control" placeholder="Nombre completo" required name="name">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-user"></span>
@@ -18,7 +20,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="email" class="form-control" placeholder="Email">
+                    <input type="email" class="form-control" placeholder="Email" required name="email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -26,7 +28,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Contraseña">
+                    <input type="password" class="form-control" placeholder="Contraseña" required name="password">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -34,7 +36,8 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Repetir contraseña">
+                    <input type="password" class="form-control" placeholder="Repetir contraseña" required
+                        name="password_confirmation">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
